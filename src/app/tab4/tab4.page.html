@@ -1,0 +1,77 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Transaction Records</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="emailData">
+  <p class="alert" *ngIf="transactions?.length === 0">No transaction data recorded yet.</p>
+  <ion-list *ngIf="transactions">
+    <ion-card color="primary" *ngFor="let tx of transactions">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2" size-xs>
+            <div class="title">
+              Date
+            </div>
+            <p class="list-p">{{ tx.date | date: 'M/dd/yy' }}</p>
+          </ion-col>
+          <ion-col size="3">
+            <div class="title">
+              TxID
+            </div>
+            <p *ngIf="tx.txId.length>0 && tx.coin === 'digibyte'" class="item-desc"><a href="https://digiexplorer.info/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
+            <p *ngIf="tx.txId.length>0 && tx.coin === 'bitcoin'" class="item-desc"><a href="https://insight.bitpay.com/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
+            <p *ngIf="tx.txId.length>0 && tx.coin === 'card'" class="item-desc">{{tx.txId}}</p>
+            <!-- <p class="txid">{{ tx.txId }}</p> -->
+          </ion-col>
+          <ion-col size="2" size-xs>
+            <div class="title">
+              Rate
+            </div>
+            <p class="list-p">{{ tx.dgbPrice | number : '1.2-4' }}</p>
+          </ion-col>
+          <ion-col size="2" size-xs>
+            <div class="title">
+              Fiat
+            </div>
+            <p class="list-p">{{ tx.usdTotal | number : '1.2-2' }}</p>
+          </ion-col>
+          <ion-col size="1" size-xs>
+            <div class="title">
+              Crypto
+            </div>
+            <p class="list-p">{{ tx.dgbAmount | number : '1.2-6' }}</p>
+          </ion-col>
+          <ion-col size="2" size-xs>
+            <div class="title">
+              Items
+            </div>
+            <p class="list-p">{{ tx.items[0] }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-list>    
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <div>
+      <ion-item>
+        <h2 class="item-desc3">Currency: {{ this.sum | number: '1.2-2' }}</h2> 
+        <p class="item-desc3">DigiByte: {{ this.dgbSum | number: '1.2-6' }}</p>
+        <p class="item-desc3">Bitcoin: {{ this.btcSum | number: '1.2-8' }}</p>
+      </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button [disabled]="transactions?.length === 0" expand="block" shape="round" (click)="downloadCSV()">CSV</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button  [disabled]="transactions?.length === 0" expand="block" shape="round" fill="outline" color="danger" (click)="confirmDelete()">Delete</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>  
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Payment Method</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item (click)="selectCoin('digibyte')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/DigiByte.jpg">
+      </ion-avatar>
+      <p>DigiByte</p>
+      <p slot="end">Select</p>
+    </ion-item>
+    <ion-item (click)="selectCoin('litecoin')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/ltc.png">
+      </ion-avatar>
+      <p>Litecoin</p>
+      <p slot="end">Select</p>
+    </ion-item>
+    <ion-item (click)="selectCoin('bitcoin')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/Bitcoin.jpg">
+      </ion-avatar>
+      <p>Bitcoin</p>
+      <p slot="end">Select</p>
+    </ion-item>
+    <ion-item (click)="selectCoin('card')" text-wrap>
+      <ion-icon name="card" color="primary" item-start></ion-icon>
+      <p>Card Payment</p>
+      <p slot="end">Select</p>
+    </ion-item>
+  </ion-list>
+  <div padding>  
+    <ion-button fill="outline" expand="block" (click)="close()">
+      Cancel
+    </ion-button>
+  </div> 
+</ion-content>

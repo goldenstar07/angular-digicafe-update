@@ -1,0 +1,30 @@
+<ion-header no-border>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Charge Card</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>Subtotal: {{this.currency}} {{this.subtotal | number: '1.2-4'}}</p>
+        <p>Tax: {{this.tax | number: '1.2-4'}}</p>
+        <p class="light">Total: {{this.currency}} {{this.amount | number: '1.2-4'}}</p>
+      </ion-col>
+      <ion-col>
+        <div *ngIf="this.businessEmail != null">
+          <img class="business-logo" src="{{this.logo}}"/>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="line"></div>
+  <div padding>
+    <ion-button expand="block" color="primary" (click)="scanCardStripe()">Scan Card<ion-icon slot="end" name="card"></ion-icon></ion-button>
+  </div>
+  <!-- (click)="scanCardStripe()" -->
+</ion-content>

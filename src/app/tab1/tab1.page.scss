@@ -1,0 +1,38 @@
+.center {
+  padding-top: 120px;
+}
+
+ion-content{
+  --ion-background-color: var(--ion-color-primary);
+  --overflow: hidden;
+}
+
+.splash-logo {
+  padding-bottom: 20px;
+  display: block;
+  margin: auto;
+  width: 60%;
+  max-width: 300px;
+}
+
+.splash-intro {
+  color: #002352;
+  text-align: center;
+  max-width: 85%;
+  margin: auto;
+}
+
+p {
+  font-size: 18px;
+  color: var(--ion-color-light);
+}
+
+.buttons2 {
+  padding-top: 20px;
+}
+
+ion-button {
+  text-transform: inherit;
+  max-width: 85%;
+  margin: auto;
+}

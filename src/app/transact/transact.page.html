@@ -1,0 +1,76 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button class="top-btn" (click)="backWarning()"><ion-icon name="arrow-back"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-title>Complete Payment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollx="true" class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>{{ this.business }}</p>
+        <p *ngIf="this.optionalTax">Subtotal: {{ this.subtotal2 | number : '1.2-2'}}</p>
+        <p *ngIf="this.optionalTax">Tax: {{ this.finalTax | number : '1.2-2'}}</p>
+        <p *ngIf="this.fiat === 'USD'">Total: ${{ this.total | number : '1.2-2'}}</p>
+        <p *ngIf="this.fiat != 'USD'">{{this.fiat}} Total: {{ this.total | number : '1.2-2'}}</p>
+        <p *ngIf="this.fiat === 'USD'">{{ this.symbol }} Market Rate: ${{ this.price | number: '1.2-4' }}</p>
+        <p *ngIf="this.fiat != 'USD'">{{ this.symbol }} Market Rate: {{this.fiat}}{{ this.price | number: '1.2-4' }}</p>
+      </ion-col>
+      <ion-col *ngIf="this.businessEmail != null">
+        <img class="business-logo" src="{{this.logo}}"/>
+      </ion-col>
+    </ion-row>
+  <div class="line"></div>
+  </ion-grid>
+  <div class="due-div">
+    <p class="center">- {{this.coin}} Due -</p>
+    <div class="dgb-due">
+      <ion-item *ngIf="this.coin === 'bitcoin'" lines="none">
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/Bitcoin.jpg">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-8' }}</h1>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="this.coin === 'litecoin'" lines="none">
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/ltc.png">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-8' }}</h1>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="this.coin === 'digibyte'" lines="none"> 
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/DigiByte.jpg">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-4' }}</h1>
+        </ion-label>
+      </ion-item>
+    </div>
+    <ion-card class="card ion-padding">
+      <div *ngIf="this?.amount" class="qr-code">
+        <qrcode [qrdata]="this?.uri" [size]="256" [level]="'M'" [usesvg]="true" [colordark]="'#182650'"></qrcode>
+      </div>
+      <p class="inner-card">Click "Send" in your {{this.coin}} wallet. Scan the QR code.</p>
+      <ion-spinner class="spinnerCenter" *ngIf="this.searching2" name="crescent"></ion-spinner>
+      <p *ngIf="this.searching2" class="inner-card">Checking for Payment...<ion-spinner name="dots"></ion-spinner></p>
+    </ion-card>
+    <hr>
+    <!-- <ion-card *ngIf="this.searching2" class="card2" color="primary">
+      <div class="dgb-due">
+        <p class="dgb-total1">Checking for payment every 10 seconds.</p>
+      </div>
+    </ion-card> -->
+  </div>
+  <div *ngIf="this.timeOut === true" class="check" padding>
+    <ion-button  (click)="checkBlockchain(this.address, this.coin)" shape="round" color="primary" expand="block" [disabled]="!this.uri" (click)="checkConfirms()">
+      Check The Blockchain
+    </ion-button>
+  </div>
+</ion-content>

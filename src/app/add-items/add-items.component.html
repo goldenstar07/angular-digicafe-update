@@ -1,0 +1,69 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Add New Item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollX="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Enter Price 0.00</ion-label>
+          <ion-input type="number" [(ngModel)]="price"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Description (optional)</ion-label>
+          <ion-input type="text" [(ngModel)]="description"></ion-input>
+        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12 col-sm>
+              <div>
+                <ion-button shape="round" expand="full" fill="outline" (click)="saveItem()" [disabled]="!price || price <= 0">
+                  Add Item <ion-icon slot="end" name="add-circle"></ion-icon>
+                </ion-button>
+              </div>  
+            </ion-col>
+            <ion-col col-12 col-sm>
+              <div>  
+                <ion-button expand="full" fill="outline" shape="round" color="danger" (click)="close()">
+                  Cancel
+                </ion-button>
+              </div> 
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12 col-sm>
+              <div>  
+                <ion-button expand="full" shape="round" class="addbtn" [disabled]="!price || price <= 0" (click)="storeUserDefined()">
+                  Save Item<ion-icon slot="end" name="cloud-done"></ion-icon>
+                </ion-button>
+                <ion-searchbar class="bar" placeholder="Search Defined Items" [(ngModel)]="searchTerm" (ionChange)="setFilteredItems()"></ion-searchbar>
+              </div>
+              <ion-list>
+                <ion-item-sliding *ngFor="let item of setItems" detail>
+                  <ion-item>
+                    <ion-label text-wrap>
+                      <p class="item-desc">{{ item.description }}</p>
+                      <ion-text color="primary">{{ item.price | number: '1.2-2'}}</ion-text>
+                    </ion-label>
+                    <div slot="end">
+                      <ion-button slot="icon-only" color="primary" fill="outline" (click)="saveFromUserDefined(item)"><ion-icon name="checkmark-circle-outline"></ion-icon></ion-button>
+                      <ion-button slot="icon-only" color="medium" fill="outline" (click)="editItem(item)"><ion-icon name="pencil"></ion-icon></ion-button>
+                    </div>
+                  </ion-item>
+                  <ion-item-options side="end">
+                    <ion-item-option color="danger" (click)="deleteItem(item)"><ion-icon name="trash"></ion-icon></ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

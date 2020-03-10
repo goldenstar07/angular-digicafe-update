@@ -1,0 +1,186 @@
+<ion-header class="ion-no-border"> 
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="this.loggedin">
+      <ion-button (click)="logOut()">Sign Out</ion-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title> 
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item (click)="saveBusiness()"> 
+      <ion-label>
+        <p>Business Name</p>
+        <ion-text>{{ this.business }}</ion-text>
+        <ion-text *ngIf="this.business === null || this.business === ''">Tap to enter business name.</ion-text>
+     </ion-label>
+    </ion-item>
+    <ion-item (click)="saveEmail()"> 
+      <ion-label>
+        <p>Business Email</p>
+        <ion-text>{{ this.businessEmail }}</ion-text>
+        <ion-text *ngIf="this.businessEmail === null || this.businessEmail === ''">Tap to enter business email.</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="saveDigiByte()" *ngIf="!this.autoSell"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/DigiByte.jpg">
+      </ion-avatar>
+      <ion-label>
+        <p>DigiByte Address</p>
+        <ion-text>{{ this.externalAddress }}</ion-text>
+        <ion-text *ngIf="this.externalAddress === null || this.externalAddress === ''">Tap to enter DigiByte address.</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="saveLitecoin()" *ngIf="!this.autoSell"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/ltc.png">
+      </ion-avatar>
+      <ion-label>
+        <p>Litecoin Address</p>
+        <ion-text>{{ this.ltcAddress }}</ion-text>
+        <ion-text *ngIf="this.ltcAddress === null || this.ltcAddress === ''">Tap to enter Litecoin address.</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="saveBitcoin()" *ngIf="!this.autoSell"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/Bitcoin.jpg">
+      </ion-avatar>
+      <ion-label>
+        <p>Bitcoin Address</p>
+        <ion-text>{{ this.btcAddress }}</ion-text>
+        <ion-text *ngIf="this.btcAddress === null || this.btcAddress === ''">Tap to enter Bitcoin address.</ion-text>
+      </ion-label>
+    </ion-item>
+    <!-- <ion-item> 
+      <ion-label>
+        <p>Internal Transaction Wallet</p>
+        <ion-text (click)="copyAddress()" *ngIf="this.dgbAddress">DigiByte Transactions</ion-text>
+        <ion-text *ngIf="this.dgbAddress === null || this.dgbAddress === ''">Click "Create" to generate address.</ion-text>
+      </ion-label>
+      <ion-button *ngIf="!dgbAddress" slot="end" color="primary" size="small" (click)="setDGB()">Create</ion-button>
+      <ion-button *ngIf="dgbAddress" slot="end" color="primary" size="small" (click)="toWallet()"><ion-icon name="wallet"></ion-icon></ion-button>
+    </ion-item> -->
+    <ion-item *ngIf="this.bittrexKey">
+      <ion-label>Auto Sell With Bittrex</ion-label>
+      <ion-toggle slot="end" color="primary" (ionChange)="autoSellActive()" [(ngModel)]="autoSell" checked="true"></ion-toggle>
+    </ion-item>
+    <ion-item (click)="saveBittrexKey()"> 
+      <ion-label>
+        <p>Bittrex API Key</p>
+        <ion-text class="password">{{ this.bittrexKey }}</ion-text>
+        <ion-text *ngIf="this.bittrexKey === null || this.bittrexKey === ''">Tap to enter Bittrex API Key.</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.autoSell && this.bittrexKey"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/DigiByte.jpg">
+      </ion-avatar>
+      <ion-label>
+        <p>DigiByte Bittrex Address</p>
+        <ion-text>{{ this.dgbBittrexAddress }}</ion-text>
+        <ion-button size ="small" fill="outline" (click)="saveDigiByteBittrex()" *ngIf="!this.dgbBittrexAddress">Fetch Address</ion-button>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.autoSell && this.bittrexKey"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/ltc.png">
+      </ion-avatar>
+      <ion-label>
+        <p>Litecoin Bittrex Address</p>
+        <ion-text>{{ this.ltcBittrexAddress }}</ion-text>
+        <ion-button size ="small" fill="outline" (click)="saveLitecoinBittrex()" *ngIf="!this.ltcBittrexAddress">Fetch Address</ion-button>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.autoSell && this.bittrexKey"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/Bitcoin.jpg">
+      </ion-avatar>
+      <ion-label>
+        <p>Bitcoin Bittrex Address</p>
+        <ion-text>{{ this.btcBittrexAddress }}</ion-text>
+        <ion-button size ="small" fill="outline" (click)="saveBitcoinBittrex()" *ngIf="!this.btcBittrexAddress">Fetch Address</ion-button>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.stripeId">
+      <ion-avatar>
+        <img src="../../assets/stripe.png">
+      </ion-avatar>
+      <ion-label>
+          <ion-text class="address">Stripe Connected</ion-text>
+      </ion-label>
+      <!-- <ion-button class="stp-btn" size="small" fill="outline" color="primary" (click)="disconnectStripe()">Disconnect</ion-button> -->
+    </ion-item>
+    <ion-item class="trns">
+      <ion-label color="dark">Currency Selection</ion-label>
+      <ion-select multiple="false" [(ngModel)]="this.currency" (ionChange)="saveCurrency()">
+        <ion-select-option>USD</ion-select-option> 
+        <ion-select-option>AUD</ion-select-option>
+        <ion-select-option>BGN</ion-select-option>
+        <ion-select-option>BRL</ion-select-option>
+        <ion-select-option>CAD</ion-select-option>
+        <ion-select-option>CHF</ion-select-option>
+        <ion-select-option>CZK</ion-select-option>
+        <ion-select-option>DKK</ion-select-option>
+        <ion-select-option>EUR</ion-select-option>
+        <ion-select-option>GBP</ion-select-option>
+        <ion-select-option>HKD</ion-select-option>
+        <ion-select-option>HRK</ion-select-option>
+        <ion-select-option>IDR</ion-select-option>
+        <ion-select-option>ILS</ion-select-option>
+        <ion-select-option>ISK</ion-select-option>
+        <ion-select-option>JPY</ion-select-option>
+        <ion-select-option>KRW</ion-select-option>
+        <ion-select-option>MXN</ion-select-option>
+        <ion-select-option>MYR</ion-select-option>
+        <ion-select-option>NOK</ion-select-option>
+        <ion-select-option>NZD</ion-select-option>
+        <ion-select-option>PHP</ion-select-option>
+        <ion-select-option>PLN</ion-select-option>
+        <ion-select-option>RON</ion-select-option>
+        <ion-select-option>RUB</ion-select-option>
+        <ion-select-option>SEK</ion-select-option>
+        <ion-select-option>SGD</ion-select-option>
+        <ion-select-option>THB</ion-select-option>
+        <ion-select-option>TRY</ion-select-option>
+        <ion-select-option>ZAR</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Optional Tax Rate</ion-label>
+      <ion-toggle color="primary" (ionChange)="editOptionalTax()" [(ngModel)]="optionalTax" checked="true"></ion-toggle>
+    </ion-item>
+    <ion-item class="trns" *ngIf="optionalTax === true">
+      <ion-label>Local Tax Rate</ion-label>
+      <ion-input class="input" debounce="1500" [(ngModel)]="taxRate" (ionChange)="editTaxRate()" placeholder="Enter Decimal: 10% = 0.10"></ion-input>
+    </ion-item>
+    <!-- <ion-item (click)="saveReferral()"> 
+      <ion-label>
+        <p>Partner Code</p>
+        <ion-text class="password">{{ this.partnerAddress }}</ion-text>
+        <ion-text *ngIf="this.partnerAddress === null || this.partnerAddress === ''">Optional Partner Code</ion-text>
+      </ion-label>
+    </ion-item>-->
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <div>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button id="transact" shape="round" expand="block" [disabled]="!this.externalAddress && !this.businessEmail" (click)="toListMasterPage()">Transact</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="block" shape="round" fill="outline" (click)="goToHelp()" color="medium">Help</ion-button>
+            <!-- <ion-button expand="block" shape="round" fill="outline" (click)="getOFX()" color="medium">OFX</ion-button> -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-toolbar>
+</ion-footer>

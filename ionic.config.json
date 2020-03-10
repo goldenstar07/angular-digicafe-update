@@ -1,0 +1,8 @@
+{
+  "name": "digi-cafe-v1",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular"
+}

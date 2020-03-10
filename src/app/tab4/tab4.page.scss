@@ -1,0 +1,52 @@
+.item-desc {
+    margin: 0px;
+    font-size: 12px;
+}
+
+.item-desc-2 {
+    margin: 0px;
+    font-size: 10px;
+}
+
+.alert {
+    text-align: center;
+}
+
+a{
+    color: var(--ion-color-light);
+}
+
+h2{
+    margin-left: 15px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333333;
+}
+
+ion-button{
+    text-transform: inherit;
+}
+
+.item-desc3 {
+    margin: 8px;
+    font-size: 0.9em;
+}
+
+.title{ 
+    margin: 0px;
+    font-weight: bold;
+    color: var(--ion-color-light);
+    font-size: 0.8em;
+}
+
+.list-p {
+    margin:0px;
+    color: #ffffff;
+}
+.list-c {
+    margin:0px;
+    color: #ffffff;
+    text-transform: capitalize;
+}

@@ -1,0 +1,83 @@
+<ion-header no-border>
+  <ion-toolbar color="primary">
+    <ion-title>Send Refund</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button (click)="toWalletBalance()"><ion-icon name="arrow-back"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-button  class="trash" slot="end" color="light" size="small" fill="outline" (click)="promptDelete()"><ion-icon name="redo"></ion-icon></ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="container">
+    <div class="align">
+      <p>Pay To</p>
+    </div> 
+    <ion-item> 
+        <ion-icon slot="start" name="mail"></ion-icon>
+        <ion-label position="floating">Address</ion-label>
+      <ion-label position="floating" placeholder="Address"></ion-label>
+      <ion-input type="text" [(ngModel)]="this.toAddress"></ion-input>
+    </ion-item>
+    <div class="align">
+      <p>Amount</p>
+      <ion-button color="primary" fill="outline" shape="round" size="small" (click)="useAllFunds()">Send All Funds</ion-button>
+    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item> 
+            <ion-label position="floating">DGB</ion-label>
+            <ion-input type="number" (ionChange)="ifCoinAmount()" [(ngModel)]="this.amount"></ion-input>
+          </ion-item>
+          <p>DGB Balance: {{this.balance | number : '1.2-8'}}</p>
+        </ion-col>
+        <ion-col>
+            <p>USD</p>
+            <h3>{{this.dollarVal | currency}}</h3>
+          <!-- <ion-item> 
+            <ion-text color="tertiary" position="fixed">USD</ion-text>
+            <ion-text color="light">{{this.qtyDollar | currency}}</ion-text>
+            <ion-input type="number" (ionChange)="ifDollarAmount()" [(ngModel)]="this.qtyDollar"></ion-input>
+          </ion-item> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="check" padding>
+    <ion-button expand="block" shape="round" [disabled]="(!this.toAddress || !this.amount) || (this.amount > this.balance)" (click)="createTx()">
+      Send Funds
+    </ion-button>
+  </div>
+  <ion-card padding>
+    <p class="pk" (click)="copyAddress()">{{this.address}}</p>
+  </ion-card>
+  <div *ngIf="!this.hide" (click)="copyPk()">
+    <ion-card padding>
+        <p class="pk">{{this.pk}}</p>
+    </ion-card>
+  </div>
+  <div padding>
+    <ion-segment>
+      <ion-segment-button size="small" *ngIf="this.hide" (click)="showPk()">View Private Key
+        <ion-icon name="eye"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button  size="small" *ngIf="!this.hide" (click)="hidePk()">Hide Private Key
+        <ion-icon name="eye-off"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-content>
+<!-- <ion-footer no-border>
+  <ion-toolbar padding>
+    <ion-segment>
+      <ion-segment-button size="small" *ngIf="this.hide" (click)="showPk()">View Private Key
+        <ion-icon name="eye"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button  size="small" *ngIf="!this.hide" (click)="hidePk()">Hide Private Key
+        <ion-icon name="eye-off"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer> -->

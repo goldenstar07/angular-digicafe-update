@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Add Items</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollX="true">  
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <div slot="end"> 
+          <ion-button slot="icon-only" color="primary" fill="outline" (click)="saveItem(item)"><ion-icon name="add-circle-outline"></ion-icon></ion-button> 
+          <ion-button slot="icon-only" color="primary" fill="outline" (click)="deleteItem(item)"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+      </div>
+      <ion-text>
+        <h3 class="item-desc" *ngIf="this.currency === 'USD'">{{ item.price | currency: 0}}</h3>
+        <h3 class="item-desc" *ngIf="this.currency != 'USD'">{{ item.price | number: '1.2-2'}}</h3>
+      </ion-text>
+      <h3 class="item-desc-desc" text-wrap>{{ item.description }}</h3>
+    </ion-item>
+  </ion-list>
+</ion-content>  
+<ion-footer>
+  <ion-toolbar>
+    <div>
+      <h2 class="item-total" *ngIf="this.currency === 'USD'">Total: {{ this.sum | currency: 0 }}</h2>
+      <h2 class="item-total" *ngIf="this.currency != 'USD'">Total: <span>{{ this.currency }}</span> {{ this.sum | number: '1.2-2' }}</h2>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button id="add" shape="round" fill="outline" expand="block" color="primary" (click)="addItem()">Add Item</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="total" expand="block" shape="round" color="primary" [disabled]="this.sum <= 0" class="total" (click)="selectCoin()">TOTAL</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-toolbar>
+</ion-footer>

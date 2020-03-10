@@ -1,0 +1,48 @@
+// .bottom {
+//     padding-bottom: 14px;
+// }
+
+.green {
+    color: var(--ion-color-primary);
+}
+
+.align {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    margin-top: 10px;
+}
+
+.check {
+    padding-top: 15px;
+    margin: auto;
+    max-width: 80%;
+}
+
+.trash {
+    margin-right: 10px;
+}
+
+p {
+    margin:0px;
+}
+
+h3 {
+  margin-top: 0px;
+}
+
+ion-text{
+    margin-bottom: 0px;
+}
+
+.pk {
+    color: #000000;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+ion-item{
+    margin-bottom: 7px;
+}
