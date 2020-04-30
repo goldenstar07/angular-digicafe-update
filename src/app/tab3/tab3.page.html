@@ -155,6 +155,13 @@
         <ion-select-option value="es">Español</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item [routerLink]="['/account']" routerDirection="forward" detail="true">  
+      <ion-label>
+        <p class="input">Account Details</p>
+        <ion-text>Change username or password</ion-text>
+        <!-- <ion-text *ngIf="this.username === null || this.username === ''">Your unique username.</ion-text> -->
+      </ion-label>
+    </ion-item>
   </ion-list>
 </ion-content>
 <ion-footer>

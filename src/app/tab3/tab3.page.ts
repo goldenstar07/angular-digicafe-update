@@ -161,7 +161,6 @@ export class Tab3Page{
   }
 
   saveLanguage(lang){
-    console.log(lang)
     this.language = lang.detail.value;
     if(this.language === 'es'){
       this.languageShow = "Español"; 

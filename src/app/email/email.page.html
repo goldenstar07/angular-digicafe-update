@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{'password.title' | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="passwordForm">
+    <ion-item>
+      <ion-label position="stacked">{{'login.password' | translate}}</ion-label>
+      <ion-input
+        formControlName="password"
+        type="password"
+        placeholder="Your password"
+        [class.invalid]="!passwordForm.controls['password'].valid&& passwordForm.controls['password'].touched"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item
+      class="error-message"
+      *ngIf="!passwordForm.controls['password'].valid
+        && passwordForm.controls['password'].touched"
+    >
+      <ion-label>{{'login.passwarn' | translate}}.</ion-label>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="stacked">{{'login.password' | translate}}</ion-label>
+      <ion-input
+        formControlName="passwordConfirm"
+        type="password"
+        placeholder="Confirm Password"
+        [class.invalid]="!passwordForm.controls['passwordConfirm'].valid&& passwordForm.controls['passwordConfirm'].touched"
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item
+      class="error-message"
+      *ngIf="!passwordForm.controls['passwordConfirm'].valid
+        && passwordForm.controls['passwordConfirm'].touched"
+    >
+      <ion-label>{{'login.passwarn' | translate}}.</ion-label>
+    </ion-item>
+    
+    <ion-button shape="round" class="btn ion-padding" (click)="handleResetPassword(passwordForm)" expand="block" [disabled]="passwordForm.value.password !== passwordForm.value.passwordConfirm">
+      {{'login.login' | translate}}
+    </ion-button>
+  </form>
+</ion-content>

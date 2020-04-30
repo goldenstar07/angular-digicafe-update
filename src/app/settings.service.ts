@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-
+import {AlertController} from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +11,7 @@ export class SettingsService {
   public userProfile: firebase.firestore.DocumentReference;
   public currentUser: firebase.User;
 
-  constructor() {
+  constructor(public alertCtrl: AlertController) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;
@@ -77,14 +77,18 @@ export class SettingsService {
     );
   
     return this.currentUser
-      .reauthenticateAndRetrieveDataWithCredential(credential)
+      .reauthenticateWithCredential(credential)
       .then(() => {
         this.currentUser.updateEmail(newEmail).then(() => {
           this.userProfile.update({ email: newEmail });
         });
       })
-      .catch(error => {
-        console.error(error);
+      .catch(async error => {
+        const alert = await this.alertCtrl.create({
+          message: error.message,
+          buttons: [{ text: 'Ok', role: 'cancel' }],
+        });
+        await alert.present();
       });
   }
 
@@ -95,14 +99,19 @@ export class SettingsService {
     );
   
     return this.currentUser
-      .reauthenticateAndRetrieveDataWithCredential(credential)
+      .reauthenticateWithCredential(credential)
       .then(() => {
         this.currentUser.updatePassword(newPassword).then(() => {
           console.log('Password Changed');
         });
       })
-      .catch(error => {
+      .catch(async(error) => {
         console.error(error);
+        const alert = await this.alertCtrl.create({
+          message: error.message,
+          buttons: [{ text: 'Ok', role: 'cancel' }],
+        });
+        await alert.present();
       });
   }
 }

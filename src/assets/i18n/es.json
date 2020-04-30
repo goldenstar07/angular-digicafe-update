@@ -44,7 +44,6 @@
         "add": "Agregar articulo",
         "cancel": "Cancelar",
         "save": "Guardar articulo"
-  
     },
     "transact": {
         "title": "Pago completado",
@@ -90,6 +89,9 @@
         "email": "Email",
         "please": "Por favor introduzca un email válido.",
         "reset": "Restablece tu password"
+    },
+    "password":{
+        "title": "Introduzca nueva contraseña"
     }
 }
  

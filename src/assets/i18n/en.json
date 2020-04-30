@@ -76,9 +76,9 @@
         "login": "Log In",
         "create": "Create a new account",
         "forgot":"I forgot my password"
-
-
-
+    },
+    "password":{
+        "title": "Enter New Password"
     },
     "signup": {
         "title": "Signup",
