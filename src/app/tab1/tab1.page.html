@@ -1,32 +1,18 @@
 <ion-content>
   <div class="content">
     <div class="center">
-      <img class="splash-logo" src='assets/DigiCafeV2.svg'>
+      <img class="splash-logo" src='assets/digicafe-logo.svg'>
       <div class="splash-intro">
-        <p>Hello! Let's Get Started.</p>
+        <p>{{'home.welcome' | translate}}</p>
       </div>
     </div>
-    <!-- <div class="buttons">
-      <div>
-        <ion-button shape="round" (click)="toSettingsPage()" expand="block">
-          Visit Settings
-        </ion-button>
-      </div>
-      <div class="buttons2"> 
-        <ion-button *ngIf="!this.userProfile" shape="round" fill="outline" (click)="toLoginPage()" expand="block">
-          Dashboard Connect
-        </ion-button>
-        <div *ngIf="this.userProfile" class="splash-intro">
-          <p>You are currently signed in. 👍</p>
-        </div>
-      </div> --> 
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar color="primary" class="ion-padding">
     <div>
       <ion-button shape="round" color="light" (click)="toSettingsPage()" expand="block">
-        Visit Settings
+        {{'home.settings' | translate}}
       </ion-button>
     </div>
     <div class="buttons2"> 
@@ -34,7 +20,7 @@
         Connect Dashboard
       </ion-button> -->
       <div *ngIf="this.in === true" class="splash-intro">
-        <p>You are currently signed in. 👍</p>
+        <p>{{'home.notice' | translate}} 👍</p>
       </div>
     </div> 
   </ion-toolbar>

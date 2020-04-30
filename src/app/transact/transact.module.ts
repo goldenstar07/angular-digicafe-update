@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TransactPage } from './transact.page';
 import { QRCodeModule } from 'angularx-qrcode';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     QRCodeModule,
+    TranslateModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],

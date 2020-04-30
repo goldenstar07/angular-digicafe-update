@@ -1,0 +1,95 @@
+{
+    "home": {
+        "welcome": "¡Hola! Comencemos.",
+        "settings": "Visita la Configuración",
+        "notice": "Actualmente has iniciado sesión."
+    },
+    "tabs":{
+        "welcome": "¡Hola!",
+        "settings": "Configuración",
+        "records": "Registros",
+        "transact": "Transaccion"
+    },
+    "pos": {
+        "title": "Agregar Articulos",
+        "add": "Agregar Articulo",
+        "total": "Total"
+    },
+    "settings": {
+        "title": "Configuración",
+        "logout": "Salir",
+        "auto": "Venta automática con",
+        "bname": "Nombre del negocio",
+        "tap": "Haz click para ingresar",
+        "bemail": "Email de negocios",
+        "address": "Dirección",
+        "key": "Llave",
+        "fetch": "Ir a buscar",
+        "currency": "Selección de moneda",
+        "optional-tax": "Tasa de impuesto opcional",
+        "local-tax": "Tasa de impuesto local",
+        "transact": "Tramitar",
+        "help": "Ayuda",
+        "language": "Lengua"
+    },
+    "method": {
+        "title": "Método de pago",
+        "select": "Seleccionar",
+        "cancel": "Cancelar"
+    },
+    "items": {
+        "title": "Agregar nuevo artículo",
+        "price": "Introduzca el precio",
+        "desc": "Descripción",
+        "add": "Agregar articulo",
+        "cancel": "Cancelar",
+        "save": "Guardar articulo"
+  
+    },
+    "transact": {
+        "title": "Pago completado",
+        "market": "Tasa de mercado",
+        "subtotal": "Subtotal",
+        "tax": "Impuesto",
+        "total": "Total",
+        "due": "Due",
+        "click": "Haga clic en 'Enviar' en su",
+        "wallet": "billetera. Escanea el código QR.",
+        "checking": "Comprobando el pago",
+        "bchain": "Verifique la cadena de bloques"
+    },
+    "reports": {
+        "title": "Registros de transacciones",
+        "nodata": "Aún no se registraron datos de transacciones",
+        "date": "Fecha",
+        "rate": "Tasa",
+        "items": "Articulos",
+        "currency": "Moneda",
+        "delete": "Eliminar"
+    },
+    "login": {
+        "title": "Iniciar sesión",
+        "email": "Email",
+        "please": "Por favor introduzca un email válido.",
+        "password": "Password",
+        "passwarn": "Tu password necesita tener más de 6 caracteres.",
+        "login": "Iniciar sesión",
+        "create": "Crea una nueva cuenta",
+        "forgot":"Olvidé mi contraseña"
+    },
+    "signup": {
+        "title": "Regístrate",
+        "create": "Crear una Cuenta",
+        "email": "Email",
+        "please": "Por favor introduzca un email válido.",
+        "password": "Password",
+        "passwarn": "Tu password necesita tener más de 6 caracteres."
+    },
+    "reset": {
+        "title": "Restablecer la contraseña",
+        "email": "Email",
+        "please": "Por favor introduzca un email válido.",
+        "reset": "Restablece tu password"
+    }
+}
+ 

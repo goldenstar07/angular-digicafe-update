@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Storage } from '@ionic/storage';
-import * as DigiByte from 'digibyte';
-import * as explorers from 'digibyte-explorers';
+//import * as DigiByte from 'digibyte';
+//import * as explorers from 'digibyte-explorers';
 import * as CryptoJS from 'crypto-js';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class CryptoService {
   public publicKey: any;
   public dgbAddress: any;
   public feeAddress: any;
-  public insight: any = new explorers.Insight();
+  //public insight: any = new explorers.Insight();
   public fee: number;
   public satoshis: number;
   public tx: any;

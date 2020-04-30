@@ -3,7 +3,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-
+import {TranslateService} from '@ngx-translate/core';
+import {Storage} from '@ionic/storage';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -14,12 +15,14 @@ export class LoginPage implements OnInit {
   public jwt: string = null;
   public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
-
+  public language: string = null;
   constructor(private authService: AuthService, 
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     private router: Router,
-    private formBuilder: FormBuilder) { 
+    private formBuilder: FormBuilder,
+    public translate: TranslateService,
+    private storage: Storage) { 
     //this.jwt = this.authService.digiQR().toString();
     this.loginForm = this.formBuilder.group({
       email: ['',
@@ -29,9 +32,39 @@ export class LoginPage implements OnInit {
         Validators.compose([Validators.required, Validators.minLength(6)]),
       ],
     });
+
+    // this.storage.get('language').then((data) => {
+    //   console.log(data)
+    //   this.language = !data ? null : data;
+    // });
   }
 
   ngOnInit() {
+    // this.storage.get('language').then((data) => {
+    //   console.log(data)
+    //   this.language = !data ? null : data;
+    //   this.translate.use(this.language);
+    // });
+    // if(!this.language){
+    //   this.translate.setDefaultLang('en');
+    //   this.translate.use('en');
+    // }
+  }
+
+  ionViewWillEnter(){
+    this.storage.get('language').then((data) => {
+      this.language = !data ? null : data;
+      this.translate.use(this.language);
+    });
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+    }
+  }
+
+  segmentChanged(lang){
+    this.storage.set('language', lang.detail.value);
+    this.translate.use(lang.detail.value);
   }
 
   async loginUser(loginForm: FormGroup): Promise<void> {

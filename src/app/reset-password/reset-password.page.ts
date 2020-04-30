@@ -3,7 +3,8 @@ import { AuthService } from '../auth.service';
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import {TranslateService} from '@ngx-translate/core';
+import {Storage} from "@ionic/storage";
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.page.html',
@@ -11,11 +12,15 @@ import { Router } from '@angular/router';
 })
 export class ResetPasswordPage implements OnInit {
   public resetPasswordForm: FormGroup;
+  public language: string = null;
+
   constructor(
     private authService: AuthService,
     private alertCtrl: AlertController,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private storage: Storage,
+    public translate: TranslateService
   ) {
     this.resetPasswordForm = this.formBuilder.group({
       email: [
@@ -23,6 +28,14 @@ export class ResetPasswordPage implements OnInit {
         Validators.compose([Validators.required, Validators.email]),
       ],
     });
+    this.storage.get('language').then((data) => {
+      this.language = !data ? null : data;
+      this.translate.use(this.language);
+    });
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+    }
   }
 
   ngOnInit() {}

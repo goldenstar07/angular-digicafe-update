@@ -1,6 +1,28 @@
 ion-avatar{
-    margin-left: 0px;
+    margin-left: 10px;
     margin-right: 5px;
-    height: 25px;
-    width: 25px;
-} 
+    margin-top: 15px;
+    height: 33px;
+    width: 33px;
+    float: left;
+}
+
+.start{
+    float: left;
+    margin-top: 22px;
+    color: #333333;
+}
+
+.end{
+    float: right;
+    margin-top: 22px;
+    margin-right: 12px;
+    color: #333333;
+}
+
+ion-card{
+    height: 60px;
+    border: solid 1px #bebebe;
+    border-radius: 10px;
+    box-shadow: none !important;
+}

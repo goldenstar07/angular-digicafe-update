@@ -1,40 +1,40 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>Payment Method</ion-title>
+    <ion-title>{{'method.title' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content>
   <ion-list>
-    <ion-item (click)="selectCoin('digibyte')" text-wrap>
-      <ion-avatar item-start>
-        <img src="../../assets/DigiByte.jpg">
+    <ion-card (click)="selectCoin('digibyte')">
+      <ion-avatar>
+        <img src="../../assets/dgb@2x.png">
       </ion-avatar>
-      <p>DigiByte</p>
-      <p slot="end">Select</p>
-    </ion-item>
-    <ion-item (click)="selectCoin('litecoin')" text-wrap>
+      <p class="start">DigiByte</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
+    <ion-card (click)="selectCoin('litecoin')" text-wrap>
       <ion-avatar item-start>
-        <img src="../../assets/ltc.png">
+        <img src="../../assets/ltc@2x.png">
       </ion-avatar>
-      <p>Litecoin</p>
-      <p slot="end">Select</p>
-    </ion-item>
-    <ion-item (click)="selectCoin('bitcoin')" text-wrap>
+      <p class="start">Litecoin</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
+    <ion-card (click)="selectCoin('bitcoin')" text-wrap>
       <ion-avatar item-start>
-        <img src="../../assets/Bitcoin.jpg">
+        <img src="../../assets/btc@2x.png">
       </ion-avatar>
-      <p>Bitcoin</p>
-      <p slot="end">Select</p>
-    </ion-item>
-    <ion-item (click)="selectCoin('card')" text-wrap>
+      <p class="start">Bitcoin</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
+    <!-- <ion-item (click)="selectCoin('card')" text-wrap>
       <ion-icon name="card" color="primary" item-start></ion-icon>
       <p>Card Payment</p>
       <p slot="end">Select</p>
-    </ion-item>
+    </ion-item> -->
   </ion-list>
-  <div padding>  
-    <ion-button fill="outline" expand="block" (click)="close()">
-      Cancel
+  <div class="ion-padding">  
+    <ion-button shape="round" fill="outline" expand="block" (click)="close()">
+      {{'method.cancel' | translate}}
     </ion-button>
   </div> 
 </ion-content>

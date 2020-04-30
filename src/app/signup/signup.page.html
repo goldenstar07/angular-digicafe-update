@@ -3,17 +3,25 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/login"></ion-back-button>
     </ion-buttons>
-    <ion-title>Signup</ion-title>
+    <ion-title>{{'signup.title' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <img class="splash-logo" src='assets/DigiCafeV2.svg'>
-  <h3>Create an Account</h3>
+  <ion-segment (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="en">
+      <ion-label>English</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="es">
+      <ion-label>Español</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <img class="splash-logo" src='assets/digicafe-logo.svg'>
+  <h3>{{'signup.create' | translate}}</h3>
   <ion-card color="light" class="ion-padding">
     <form [formGroup]="signupForm">
       <ion-item color="light">
-        <ion-label position="stacked">Email</ion-label> <ion-input
+        <ion-label position="stacked">{{'signup.email' | translate}}</ion-label> <ion-input
         formControlName="email"
         type="email"
         placeholder="Your email address" [class.invalid]="!signupForm.controls['email'].valid &&
@@ -26,10 +34,10 @@
         *ngIf="!signupForm.controls['email'].valid
         && signupForm.controls['email'].touched"
         >
-        <ion-label>Please enter a valid email.</ion-label>
+        <ion-label>{{'signup.please' | translate}}.</ion-label>
       </ion-item>
       <ion-item color="light">
-        <ion-label position="stacked">Password</ion-label> <ion-input
+        <ion-label position="stacked">{{'signup.password' | translate}}</ion-label> <ion-input
         formControlName="password"
         type="password"
         placeholder="Your password" [class.invalid]="!signupForm.controls['password'].valid &&
@@ -42,12 +50,12 @@
         *ngIf="!signupForm.controls['password'].valid &&
         signupForm.controls['password'].touched"
         >
-        <ion-label>Your password needs more than 6 characters.</ion-label>
+        <ion-label>{{'signup.passwarn' | translate}}.</ion-label>
       </ion-item>
       <ion-button
       expand="block" (click)="signupUser(signupForm)" [disabled]="!signupForm.valid"
       >
-      Create an Account
+      {{'signup.create' | translate}}
       </ion-button>
     </form> 
   </ion-card>

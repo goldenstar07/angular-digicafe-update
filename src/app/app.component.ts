@@ -1,8 +1,13 @@
-import { Component } from '@angular/core';
-import * as firebase from 'firebase/app';
+import { Component, NgZone } from '@angular/core';
+//import * as firebase from 'firebase/app';
 import { Platform, AlertController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
+const { App } = Plugins;
+//import {environment} from '../environments/environment';
+//import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -10,27 +15,29 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent {
   constructor(
+    private router: Router, 
+    private zone: NgZone,
     public platform: Platform,
     private alertCtrl: AlertController,
     private network: Network,
     private authService: AuthService
   ) {
+    //firebase.initializeApp(environment.firebaseConfig);
     this.initializeApp();
-    var config = {
-      apiKey: "AIzaSyDsXpRvAqUfGAoN7ArhwdOUKPwJGKlBpLI",
-      authDomain: "digicafe-dashboard.firebaseapp.com",
-      databaseURL: "https://digicafe-dashboard.firebaseio.com",
-      projectId: "digicafe-dashboard",
-      storageBucket: "digicafe-dashboard.appspot.com",
-      messagingSenderId: "489467683111"
-    };
-    firebase.initializeApp(config);
   }
 
   initializeApp(){
     this.platform.ready().then(() => {
       this.listenDisconnect();
       this.listenConnect();
+      App.addListener('appUrlOpen', (data: any) => {
+        this.zone.run(() => {
+            const slug = data.url.split(".com").pop();
+            if (slug) {
+                this.router.navigateByUrl(slug);
+            }
+        });
+    });
     });
   }
 

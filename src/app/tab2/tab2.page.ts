@@ -6,6 +6,7 @@ import { AddItemsComponent } from '../add-items/add-items.component';
 import { SettingsService } from '../settings.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { MethodComponent } from '../../app/method/method.component'; 
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tab2',
@@ -30,11 +31,21 @@ export class Tab2Page {
   public digibyteAddress: string;
   public bitcoinAddress: string;
   public litecoinAddress: string;
+  public language: string = null;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, 
     public loadingCtrl: LoadingController, public storage: Storage,
     public alertCtrl: AlertController, private dataPass: DataPassService,
-    private settingsService: SettingsService,  private changeRef: ChangeDetectorRef) {
+    private settingsService: SettingsService,  private changeRef: ChangeDetectorRef,
+    public translate: TranslateService) {
+      this.storage.get('language').then((data) => {
+        this.language = !data ? null : data;
+        this.translate.use(this.language);
+      });
+      if(!this.language){
+        this.translate.setDefaultLang('en');
+        this.translate.use('en');
+      }
   }
 
   ionViewWillEnter() {
@@ -53,7 +64,7 @@ export class Tab2Page {
         this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
         this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
         this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
-        this.stripeId = this.userProfile.stripeId;
+        //this.stripeId = this.userProfile.stripeId;
         this.key = this.userProfile.encoded;
           if(!this.digibyteAddress || !this.dgbBittrexAddress){
             this.confirmAddress();
@@ -135,28 +146,28 @@ export class Tab2Page {
     await alert.present();
   }
 
-  async confirmStripe() {
-    const alert = await this.alertCtrl.create({
-      header: 'Stripe is not set up.',
-      message: 'You must be logged in and have connected Stripe in the web dashboard.',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
-        },
-        {
-          text: 'Dashboard',
-          handler: () => {
-            location.href = 'https://dash.digibytecafe.com';
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // async confirmStripe() {
+  //   const alert = await this.alertCtrl.create({
+  //     header: 'Stripe is not set up.',
+  //     message: 'You must be logged in and have connected Stripe in the web dashboard.',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           console.log('Confirm Cancel');
+  //         }
+  //       },
+  //       {
+  //         text: 'Dashboard',
+  //         handler: () => {
+  //           location.href = 'https://dash.digibytecafe.com';
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
 
   async selectCoin() {
     let addModal = await this.modalCtrl.create({
@@ -185,15 +196,15 @@ export class Tab2Page {
             this.confirmAddressExists();
           }
           break;  
-        case "card":
-          if(!this.stripeId){
-            this.confirmStripe();
-          }else{
-            this.coin = coin.data;
-            this.storage.set('coin', this.coin);
-            this.toCardTx();
-          }
-          break;             
+        // case "card":
+        //   if(!this.stripeId){
+        //     this.confirmStripe();
+        //   }else{
+        //     this.coin = coin.data;
+        //     this.storage.set('coin', this.coin);
+        //     this.toCardTx();
+        //   }
+        //   break;             
         case "digibyte":
           if(this.digibyteAddress || this.dgbBittrexAddress){
             this.coin = 'digibyte';

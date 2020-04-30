@@ -1,0 +1,97 @@
+{
+    "home": {
+        "welcome": "Hello! Let's Get Started.",
+        "settings": "Visit Settings",
+        "notice": "You are currently signed in."
+    },
+    "tabs":{
+        "welcome": "Welcome",
+        "settings": "Settings",
+        "records": "Records",
+        "transact": "Transact"
+    },
+    "pos": {
+        "title": "Add Items",
+        "add": "Add Item",
+        "total": "Total"
+    },
+    "settings": {
+        "title": "Settings",
+        "logout": "Sign Out",
+        "bname": "Business Name",
+        "auto": "Auto sell with",
+        "tap": "Tap to enter",
+        "bemail": "Business Email",
+        "address": "Address",
+        "key": "Key",
+        "fetch": "Fetch",
+        "currency": "Currency Selection",
+        "optional-tax": "Optional Tax Rate",
+        "local-tax": "Local Tax Rate",
+        "transact": "Transact",
+        "help": "Help",
+        "language": "Language"
+    },
+    "method": {
+        "title": "Payment Method",
+        "select": "Select",
+        "cancel": "Cancel"
+    },
+    "items": {
+        "title": "Add New Item",
+        "price": "Enter Price",
+        "desc": "Description",
+        "add": "Add Item",
+        "cancel": "Cancel",
+        "save": "Save Item"
+
+    },
+    "transact": {
+        "title": "Complete Payment",
+        "market": "Market Rate",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "total": "Total",
+        "due": "due",
+        "click": "Click 'Send' in your",
+        "wallet": "wallet. Scan the QR code.",
+        "checking": "Checking for Payment",
+        "bchain": "Check The Blockchain"
+    },
+    "reports": {
+        "title": "Transaction Records",
+        "nodata": "No transaction data recorded yet.",
+        "date": "Date",
+        "rate": "Rate",
+        "items": "Items",
+        "currency": "Currency",
+        "delete": "Delete"
+    },
+    "login": {
+        "title": "Sign In",
+        "email": "Email",
+        "please": "Please enter a valid email address.",
+        "password": "Password",
+        "passwarn": "Your password needs more than 6 characters.",
+        "login": "Log In",
+        "create": "Create a new account",
+        "forgot":"I forgot my password"
+
+
+
+    },
+    "signup": {
+        "title": "Signup",
+        "create": "Create an Account",
+        "email": "Email",
+        "please": "Please enter a valid email address.",
+        "password": "Password",
+        "passwarn": "Your password needs more than 6 characters."
+    },
+    "reset": {
+        "title": "Reset Password",
+        "email": "Email",
+        "please": "Please enter a valid email address.",
+        "reset": "Reset your Password"
+    }
+}

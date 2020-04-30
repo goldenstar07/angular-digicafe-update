@@ -12,6 +12,7 @@ import * as io from 'socket.io-client';
 import {environment} from '../../environments/environment';
 import * as aes256 from 'aes256';
 import * as Web3Data from 'web3data-js';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transact',
@@ -71,12 +72,15 @@ export class TransactPage {
   public bID = '';
   public socket: any = null;
   public w3d: any = null;
+  public language: string = null;
 
   constructor(public navCtrl: NavController, public cryptoService: CryptoService,
     public storage: Storage, public dataPass: DataPassService, private settingsService: SettingsService,
     public loadingCtrl: LoadingController, private reportService: ReportService,
-    private alertCtrl: AlertController, public emailComposer: EmailComposer, 
-    public platform: Platform) {
+    private alertCtrl: AlertController, 
+    public platform: Platform,
+    private emailComposer: EmailComposer,
+    public translate: TranslateService,) {
    
     this.tx = {};
     this.dgb = {};
@@ -126,6 +130,15 @@ export class TransactPage {
     
     this.timeOut = false;
 
+    this.storage.get('language').then((data) => {
+      this.language = !data ? null : data;
+      this.translate.use(this.language);
+    });
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+    }
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.user = user.uid;
@@ -134,6 +147,10 @@ export class TransactPage {
   }
 
   ionViewWillEnter() {
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+    }
     this.storage.get('coin').then((data) =>{
       this.coin = !data ? "digibyte" : data;
       if(this.user){
@@ -538,11 +555,7 @@ export class TransactPage {
               let email = {
                 to: data,
                 subject: `Your Receipt from ${this.business}`,
-                body: `<p>Total: ${this.amount} DGB</p>
-                <p>Purchased: ${this.output}</p>
-                <p>TxID: ${this.tx}.</p>
-                <p>Check your transaction on the blockchain at https://digiexplorer.info/tx/${this.tx}.</p>
-                <p>We appreciate your business, ${this.business}.</p>`,
+                body: `Total: ${this.amount} DGB Purchased: ${this.output} TxID: ${this.tx}. Check your transaction on the blockchain at https://digiexplorer.info/tx/${this.tx}. We appreciate your business, ${this.business}.`,
                 isHtml: true
               }
               this.sendEmail(email);
@@ -576,35 +589,50 @@ export class TransactPage {
   }
 
   emailReceipt(data){
-    // this.storage.get('coin').then((data) =>{
-    //   this.coin = !data ? "digibyte" : data;
       if(this.coin === "digibyte"){
         let email = {
           to: data,
           subject: `Your Receipt from ${this.business}`,
-          body: `<p>Total: ${this.amount} DGB</p>
-          <p>Purchased: ${this.output}</p>
-          <p>TxID: ${this.tx}.</p>
-          <p>Check your transaction on the blockchain at https://digiexplorer.info/tx/${this.tx}.</p>
-          <p>We appreciate your business, ${this.business}.</p>`,
+          body: `Total: ${this.amount} DGB Purchased: ${this.output} TxID: ${this.tx}. Check your transaction on the blockchain at https://digiexplorer.info/tx/${this.tx}. We appreciate your business, ${this.business}.`,
           isHtml: true
         }
         this.emailComposer.open(email);
-      } else{
+      } else if(this.coin === "bitcoin"){
         let email = {
           to: data,
           subject: `Your Receipt from ${this.business}`,
-          body: `<p>Total: ${this.amount} BTC</p>
-          <p>Purchased: ${this.output}</p>
-          <p>TxID: ${this.tx}.</p>
-          <p>Check your transaction on the blockchain at https://insight.bitpay.com/tx/${this.tx}.</p>
-          <p>We appreciate your business, ${this.business}.</p>`,
+          body: `Total: ${this.amount} BTC Purchased: ${this.output} TxID: ${this.tx}. Check your transaction on the blockchain at https://insight.bitpay.com/tx/${this.tx}. We appreciate your business, ${this.business}.`,
+          isHtml: true
+        }
+        this.emailComposer.open(email);
+      } else if(this.coin === "litecoin"){
+        let email = {
+          to: data,
+          subject: `Your Receipt from ${this.business}`,
+          body: `Total: ${this.amount} LTC Purchased: ${this.output} TxID: ${this.tx}. Check your transaction on the blockchain at https://insight.bitpay.com/tx/${this.tx}. We appreciate your business, ${this.business}.`,
           isHtml: true
         }
         this.emailComposer.open(email);
       }
     //});
   }
+
+  // async emailSend(details){
+  //   const email = new Email();
+  //   const hasPermission = await email.hasPermission();
+  //   if(!hasPermission){
+  //       await email.requestPermission();
+  //   }
+  //   const available = await email.isAvailable({});
+  //   if(available.hasAccount){
+  //       email.open({
+  //       to: details.to,
+  //       subject: details.subject,
+  //       body: details.body,
+  //       isHtml: true,
+  //     })
+  //   }
+  // }
 
   storeTransactionData() {
     let pass = {

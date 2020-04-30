@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController, AlertController, ToastController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { ItemsService } from '../items.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-items',
@@ -16,6 +17,7 @@ export class AddItemsComponent implements OnInit {
   searchTerm: string = '';
   searching: any = false;
   ios: boolean;
+  public language: string = null;
 
   constructor(private itemsService: ItemsService, 
     public navCtrl: NavController, 
@@ -23,7 +25,8 @@ export class AddItemsComponent implements OnInit {
     public alertCtrl: AlertController, 
     public storage: Storage, 
     public toast: ToastController, 
-    public platform: Platform) {
+    public platform: Platform,
+    public translate: TranslateService) {
       this.storage.get('userSet').then((data) => {
         if(data != null){
         this.setItems = data;
@@ -34,6 +37,15 @@ export class AddItemsComponent implements OnInit {
         this.ios = true;
       } else {
         this.ios = false;
+      }
+
+      this.storage.get('language').then((data) => {
+        this.language = !data ? null : data;
+        this.translate.use(this.language);
+      });
+      if(!this.language){
+        this.translate.setDefaultLang('en');
+        this.translate.use('en');
       }
   }
 

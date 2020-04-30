@@ -1,16 +1,17 @@
 PODS:
-  - Capacitor (1.4.0):
-    - CapacitorCordova (= 1.4.0)
-  - CapacitorCordova (1.4.0)
-  - CordovaPlugins (1.4.0):
+  - Capacitor (2.0.1):
+    - CapacitorCordova (= 2.0.1)
+  - CapacitorCordova (2.0.1)
+  - CordovaPlugins (2.0.1):
     - CapacitorCordova
-  - CordovaPluginsResources (0.0.105)
+  - TeamhiveCapacitorEmail (1.0.0):
+    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
-  - CordovaPluginsResources (from `../capacitor-cordova-ios-plugins`)
+  - "TeamhiveCapacitorEmail (from `../../node_modules/@teamhive/capacitor-email`)"
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -19,15 +20,15 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
-  CordovaPluginsResources:
-    :path: "../capacitor-cordova-ios-plugins"
+  TeamhiveCapacitorEmail:
+    :path: "../../node_modules/@teamhive/capacitor-email"
 
 SPEC CHECKSUMS:
-  Capacitor: e548fe61e71fa160367a36387f54483647ca20f6
-  CapacitorCordova: 17c1ed13e5303aa5153fb405adb4196cc56b40d5
-  CordovaPlugins: db9fb155cb282e0a0e1b0036c725f9970f479e55
-  CordovaPluginsResources: 323f609dca3c233ad6c425093aa717b87ddc2aa7
+  Capacitor: 893baa42b33635ddf23d29d23d2a7f33f7c08bc7
+  CapacitorCordova: 9fee2eb6780331b6ff09710d6a7d1f2e4707f1b9
+  CordovaPlugins: 9083c04d3f19a434aec9a6f9408cab5dc7aecde2
+  TeamhiveCapacitorEmail: 6f53398bf71d56a7a33ecc061baefbc09a06ad8d
 
-PODFILE CHECKSUM: 5ad79ac0787a5f821b9ba6ff20ac717b8d75b091
+PODFILE CHECKSUM: 821a3ef12f133124037de6d5000b3a4f53233718
 
 COCOAPODS: 1.7.5

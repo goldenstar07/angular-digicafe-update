@@ -1,20 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-//import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { CardIO } from '@ionic-native/card-io/ngx';
 import { HttpClient } from "@angular/common/http";
-import { Stripe } from '@ionic-native/stripe/ngx';
-//import * as jwt from 'jwt-simple';
 import { Storage } from '@ionic/storage';
 import { DataPassService } from '../data-pass.service';
 import { SettingsService } from '../settings.service';
 import { Md5 } from "md5-typescript";
 import { environment } from 'src/environments/environment';
 import { AlertController, NavController, LoadingController, Platform } from '@ionic/angular';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { ReportService } from '../report.service';
 import * as firebase from 'firebase/app';
-// import 'firebase/firestore';
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+import { Email } from '@teamhive/capacitor-email';
 
 @Component({
   selector: 'app-card',
@@ -51,16 +45,15 @@ export class CardPage implements OnInit {
   // curr: string = 'USD';
   // currencyIcon: string = '$';
 
-  constructor(private cardIO: CardIO,
-    private stripe: Stripe,
-    private payPal: PayPal,
+  constructor(//private cardIO: CardIO,
+    // private stripe: Stripe,
+    // private payPal: PayPal,
     //private barcodeScanner: BarcodeScanner,
     private http: HttpClient,
     public storage: Storage,
     private dataPass: DataPassService,
     private settingsService: SettingsService,
     private alertCtrl: AlertController,
-    public emailComposer: EmailComposer,
     public reportService: ReportService,
     public navCtrl: NavController,
     public loadingCtrl: LoadingController,
@@ -126,37 +119,37 @@ export class CardPage implements OnInit {
   }
 
   scanCardStripe(){
-    this.cardIO.canScan()
-      .then(
-        (res: boolean) => {
-          if(res){
-            let options = {
-              requireExpiry: true,
-              requireCVV: true,
-              requirePostalCode: false,
-              hideCardIOLogo: true
-            };
-            this.cardIO.scan(options)
-              .then(res => {
-                console.log(res);
-                this.stripe.setPublishableKey(environment.stripe_pub);
-                let cardDetails = {
-                  number: res.cardNumber,
-                  expMonth: res.expiryMonth,
-                  expYear: res.expiryYear,
-                  cvc: res.cvv
-                }
-                this.card = res.redactedCardNumber;
-                this.stripe.createCardToken(cardDetails)
-                  .then(token => {
-                    console.log(token);
-                    this.makePayment(token.id);
-                  })
-                  .catch(error => console.error(error));
-              });
-          }
-        }
-      );
+    // this.cardIO.canScan()
+    //   .then(
+    //     (res: boolean) => {
+    //       if(res){
+    //         let options = {
+    //           requireExpiry: true,
+    //           requireCVV: true,
+    //           requirePostalCode: false,
+    //           hideCardIOLogo: true
+    //         };
+    //         this.cardIO.scan(options)
+    //           .then(res => {
+    //             console.log(res);
+    //             this.stripe.setPublishableKey(environment.stripe_pub);
+    //             let cardDetails = {
+    //               number: res.cardNumber,
+    //               expMonth: res.expiryMonth,
+    //               expYear: res.expiryYear,
+    //               cvc: res.cvv
+    //             }
+    //             this.card = res.redactedCardNumber;
+    //             this.stripe.createCardToken(cardDetails)
+    //               .then(token => {
+    //                 console.log(token);
+    //                 this.makePayment(token.id);
+    //               })
+    //               .catch(error => console.error(error));
+    //           });
+    //       }
+    //     }
+    //   );
   }
 
   async getLogoHash(){
@@ -191,6 +184,23 @@ export class CardPage implements OnInit {
       });  
     } catch(e){
       this.presentConfirmFail(e);
+    }
+  }
+
+  async emailSend(details){
+    const email = new Email();
+    const hasPermission = await email.hasPermission();
+    if(!hasPermission){
+        await email.requestPermission();
+    }
+    const available = await email.isAvailable({});
+    if(available.hasAccount){
+        email.open({
+        to: details.to,
+        subject: details.subject,
+        body: details.body,
+        isHtml: true
+        })
     }
   }
 
@@ -335,14 +345,10 @@ export class CardPage implements OnInit {
     let email = {
       to: data,
       subject: `Your Receipt from ${this.business}`,
-      body: `<p>Total: ${this.amount}</p>
-      <p>Purchased: ${this.output}</p>
-      <p>TxID: ${this.tx}.</p>
-      <p>Check your receipt here ${this.receipt}.</p>
-      <p>We appreciate your business, ${this.business}.</p>`,
+      body: `Total: ${this.amount} Purchased: ${this.output} TxID: ${this.tx}. Check your receipt here ${this.receipt}. We appreciate your business, ${this.business}.`,
       isHtml: true
     }
-    this.emailComposer.open(email);
+    this.emailSend(email);
   }
 
   storeTransactionData() {

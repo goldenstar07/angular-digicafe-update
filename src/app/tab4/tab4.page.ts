@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Platform, NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { ReportService } from '../report.service';
 import { Storage } from '@ionic/storage';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
-//import { File } from '@ionic-native/file/ngx';
-import { ChangeDetectorRef } from '@angular/core';
 import { SettingsService } from '../settings.service';
 import { Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
-
+import { Email } from '@teamhive/capacitor-email';
 const { Filesystem } = Plugins;
+//import * as sgMail from '@sendgrid/mail';
+//import { environment } from 'src/environments/environment';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import * as firebase from 'firebase/app';
+//import {HttpClient} from '@angular/common/http';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-items',
@@ -23,27 +26,54 @@ export class Tab4Page {
   public sum: number = 0.00;
   public dgbSum: number = 0.00;
   public btcSum: number = 0.00;
+  public ltcSum: number = 0.00;
   public canEmail: boolean = false;
   public businessEmail: string;
   public userProfile: any;
   public cardSum: number = 0.00;
+  public uid: string;
+  public language: string = null;
 
   constructor(public storage: Storage, public reportService: ReportService, public navCtrl: NavController, 
-    public modalCtrl: ModalController, public alertCtrl: AlertController, public toast: ToastController, 
-    public emailComposer: EmailComposer, public platform: Platform, 
-    private changeRef: ChangeDetectorRef, private settingsService: SettingsService) { 
+    public modalCtrl: ModalController, public alertCtrl: AlertController, public toast: ToastController, public platform: Platform, 
+    private changeRef: ChangeDetectorRef, private settingsService: SettingsService, private emailComposer: EmailComposer,
+    public translate: TranslateService) { 
     
     // this.storage.get('myBusinessEmail').then((data) => {
     //   this.businessEmail = data;
     // }); 
+    this.storage.get('language').then((data) => {
+      this.language = !data ? null : data;
+      this.translate.use(this.language);
+    });
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+    }
   }
 
   ionViewWillEnter() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.uid = user.uid;
+      } 
+      this.changeRef.detectChanges();
+      if(this.uid){
+        this.settingsService
+        .getUserProfile()
+        .get()
+        .then( userProfileSnapshot => {
+          this.userProfile = userProfileSnapshot.data();
+          this.businessEmail = this.userProfile.businessEmail;
+        });
+      }
+    });
     this.storage.get('txRecords').then((data) => {
       if(data){
         this.transactions = data;
         this.calculateSales();
         this.calculateDGB();
+        this.calculateLTC();
         this.calculateBTC();
         this.calculateCard();
       } else {
@@ -70,6 +100,13 @@ export class Tab4Page {
   calculateDGB() {
     let transactions = this.filterCoins('digibyte');
     this.dgbSum = transactions.reduce((total, transaction) => {
+    return total + transaction.dgbAmount;
+    }, 0);
+  }
+
+  calculateLTC() {
+    let transactions = this.filterCoins('litecoin');
+    this.ltcSum = transactions.reduce((total, transaction) => {
     return total + transaction.dgbAmount;
     }, 0);
   }
@@ -133,7 +170,7 @@ export class Tab4Page {
     console.log(csv);
     if (csv == null) return;
     filename = 'DigiCafeExport.csv';
-
+    //this.email(csv)
     if(this.platform.is('ios') || this.platform.is('android')) {
       this.testEmail(filename, csv);
     } else {
@@ -169,7 +206,6 @@ export class Tab4Page {
             body: "Your exported transaction report.",
             isHtml: true
           };
-          console.log(res);
           this.emailComposer.open(email);
         });
       });
@@ -177,6 +213,60 @@ export class Tab4Page {
       console.error('Unable to write file', e);
     }
   }
+
+  // async email(details){
+  //   let email = {
+  //     to: 'max@mustermann.de',
+  //     cc: 'erika@mustermann.de',
+  //     bcc: ['john@doe.com', 'jane@doe.com'],
+  //     attachments: [
+  //       'file://img/logo.png',
+  //       'res://icon.png',
+  //       'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
+  //       'file://README.pdf'
+  //     ],
+  //     subject: 'Cordova Icons',
+  //     body: 'How are you? Nice greetings from Leipzig',
+  //     isHtml: true
+  //   }
+  //   // Send a text message using default options
+  //   this.emailComposer.open(email);
+    // this.http.post('https://us-central1-stripe-test-api.cloudfunctions.net/payWithStripe/email', {
+    //   to: this.businessEmail,
+    //   from: "support@digibytecafe.com",
+    //   subject: "Your DigiCafe Report",
+    //   text: "Your exported transaction report.",
+    //   html: "Your exported transaction report.",
+    //   attachments: details
+    // }).subscribe(res => {
+    //   console.log(res);
+    // })
+    // sgMail.setApiKey(environment.sendGrid);
+    // const msg = {
+    //   to: details.to,
+    //   from: this.businessEmail,
+    //   subject: details.subject,
+    //   text: details.body,
+    //   html: details.body,
+    //   attachments: details.attachments
+    // };
+    // sgMail.send(msg);
+    // const email = new Email();
+    // const hasPermission = await email.hasPermission();
+    // if(!hasPermission){
+    //     await email.requestPermission();
+    // }
+    // const available = await email.isAvailable({});
+    // if(available.hasAccount){
+    //     email.open({
+    //     to: details.to,
+    //     subject: details.subject,
+    //     body: details.body,
+    //     isHtml: true,
+    //     attachments: details
+    //     })
+    // }
+  //}
 
   async confirmDelete() {
     const alert = await this.alertCtrl.create({

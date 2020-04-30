@@ -1,6 +1,6 @@
 {
-  "appId": "com.digibytecafe",
-  "appName": "digi-cafe-v1",
+  "appId": "com.dgbCafe.dgbCafe",
+  "appName": "DigiCafe",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www"

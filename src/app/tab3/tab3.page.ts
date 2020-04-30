@@ -10,8 +10,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import * as firebase from 'firebase/app';
 import {environment} from '../../environments/environment';
 import * as aes256 from 'aes256';
-
-//import 'firebase/firestore';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tab3',
@@ -46,13 +45,16 @@ export class Tab3Page{
   public stripeId: string = null;
   public time: string = null;
   public code: string = null;
+  public language: string = null;
+  public languageShow: string = null;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, 
     public storage: Storage, public toast: ToastController, 
     private authService: AuthService, public loadingCtrl: LoadingController,
     private settingsService: SettingsService, private router: Router, 
     private changeRef: ChangeDetectorRef, public crypto: CryptoService,
-    private clipboardService: ClipboardService) {
+    private clipboardService: ClipboardService,
+    public translate: TranslateService) {
         
     this.storage.get('myCurrency').then((data) => {
           this.currency = !data ? 'USD' : data;
@@ -68,7 +70,22 @@ export class Tab3Page{
       
     this.storage.get('auto-sell').then((data) => {
         this.autoSell= !data ? false : data;
-      }); 
+      });
+    
+    this.storage.get('language').then((data) => {
+      this.language = !data ? null : data;
+      this.translate.use(this.language);
+      if(this.language === 'es'){
+        this.languageShow = "Español"; 
+      } else {
+        this.languageShow = "English"
+      }
+    });
+    if(!this.language){
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
+      this.languageShow = "English"
+    }
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -95,7 +112,7 @@ export class Tab3Page{
         this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
         this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
         this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
-        this.stripeId = this.userProfile.stripeId;
+        //this.stripeId = this.userProfile.stripeId;
         this.time = environment.key;
         this.code = `${this.time}${this.uid}`;
         let decrypt: any = this.userProfile.encoded;
@@ -141,6 +158,16 @@ export class Tab3Page{
     if(this.uid){
       this.settingsService.updateCurrency(this.currency);
     }
+  }
+
+  saveLanguage(lang){
+    console.log(lang)
+    this.language = lang.detail.value;
+    if(this.language === 'es'){
+      this.languageShow = "Español"; 
+    }
+    this.storage.set('language', this.language);
+    this.translate.use(this.language);
   }
 
   editOptionalTax(){
@@ -502,43 +529,6 @@ export class Tab3Page{
     })
   }
 
-  // async saveReferral(): Promise<void> {
-  //   const alert = await this.alertCtrl.create({
-  //     subHeader: 'Your Referral DigiByte "D" or "S" Address',
-  //     inputs: [
-  //       {
-  //         type: 'text',
-  //         name: 'partnerAddress',
-  //         placeholder: 'Your Referral DigiByte Address',
-  //         value: this.partnerAddress,
-  //       }
-  //     ],
-  //     buttons: [
-  //       { 
-  //         text: 'Cancel', 
-  //         role: 'cancel'
-  //       }, {
-  //         text: 'Save',
-  //         handler: (data) => {
-  //           this.partnerAddress = data.partnerAddress.trim();
-  //             if(this.partnerAddress.charAt(0) === 'D' ||
-  //               this.partnerAddress.charAt(0) === 'S') {
-  //               this.storage.set('partner', this.partnerAddress);
-  //               this.presentToast();
-  //             } else if (this.partnerAddress === null || this.partnerAddress === ''){
-  //               this.externalAddress = '';
-  //               this.storage.set('partner', this.partnerAddress);
-  //             } else {
-  //               this.partnerAddress = '';
-  //               this.addressWarning(data.partnerAddress);
-  //             }
-  //         },
-  //       },
-  //     ]
-  //   });
-  //   await alert.present();
-  // }
-
   async saveBittrexKey(): Promise<void> {
     const alert = await this.alertCtrl.create({
       subHeader: 'Your Bittrex API Key & Secret',
@@ -648,6 +638,10 @@ export class Tab3Page{
 
   goToHelp() {
       location.href = `http://www.digibytecafe.com/faq/`;  
+  }
+
+  connectUphold(){
+    location.href = 'https://sandbox.uphold.com/authorize/fe9cf62a23785a443b6915b4007a0eb10364b4f7?scope=accounts:read%20cards:read%20transactions:deposit%20transactions:read%20transactions:transfer:self%20transactions:withdraw';
   }
   
 }

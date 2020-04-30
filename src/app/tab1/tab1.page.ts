@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import * as firebase from 'firebase/app';
 import { AuthService } from '../auth.service';
-
+import {TranslateService} from '@ngx-translate/core';
+import {Storage} from '@ionic/storage';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -12,8 +13,20 @@ export class Tab1Page {
   public userProfile: any = null;
   //public loggedin: boolean = false;
   public in: boolean = false;
-
-  constructor(public navCtrl: NavController, public authService: AuthService) {
+  public language: string = null;
+  constructor(public navCtrl: NavController, 
+    public authService: AuthService,
+    public translate: TranslateService,
+    private storage: Storage) {
+      //this.initTranslate();
+      this.storage.get('language').then((data) => {
+        this.language = !data ? null : data;
+        this.translate.use(this.language);
+      });
+      if(!this.language){
+        this.translate.setDefaultLang('en');
+        this.translate.use('en');
+      }
       this.authCheck();
   }
 
@@ -27,6 +40,21 @@ export class Tab1Page {
 
   toLoginPage() {
     this.navCtrl.navigateForward('/login');
+  }
+
+//   initTranslate() {
+//     this.translate.addLangs(['en', 'es']);
+//     this.translate.setDefaultLang('en');
+//     // if (this.translate.getBrowserLang() !== undefined) {
+//     //     this.translate.use(this.translate.getBrowserLang());
+//     // } else {
+//     //     this.translate.use('en'); // Set your language here
+//     // }
+
+// }
+
+  useLanguage(language: string) {
+    this.translate.use(language);
   }
 
   authCheck(){
