@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "489467683111",
+    "firebase_url": "https://digicafe-dashboard.firebaseio.com",
+    "project_id": "digicafe-dashboard",
+    "storage_bucket": "digicafe-dashboard.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489467683111:android:a9393a16ceaa24f08f4902",
+        "android_client_info": {
+          "package_name": "con.dgbCafe.dgbCafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489467683111-kim2lauqob6shtomcpatoerqlpgjj1b9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "con.dgbCafe.dgbCafe",
+            "certificate_hash": "07428d2cf98e09f43f592d154ca034a64de3423e"
+          }
+        },
+        {
+          "client_id": "489467683111-su8rgk7okqfsr7cqvsma887ufcaunpik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFWsqFKzphn1Z7yUCG61FauZJ5faEonts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489467683111-su8rgk7okqfsr7cqvsma887ufcaunpik.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "489467683111-rv1p5sg322mqnu8c9sup3vk4r32jmojh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.digibytecafe",
+                "app_store_id": "1444216299"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

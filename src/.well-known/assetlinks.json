@@ -1,0 +1,6 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target" : { "namespace": "android_app", "package_name": "com.dgbCafe.dgbCafe",
+                 "sha256_cert_fingerprints": ["F5:42:F9:4E:F8:49:90:E9:A4:B0:BB:93:B1:B7:80:F8:3D:6D:42:9D:0F:CD:E1:98:25:D6:6F:18:FB:E0:F6:11"] 
+               }
+}]

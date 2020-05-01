@@ -32,7 +32,7 @@ export class AppComponent {
       this.listenConnect();
       App.addListener('appUrlOpen', (data: any) => {
         this.zone.run(() => {
-            const slug = data.url.split(".com").pop();
+            const slug = data.url.split(".us").pop();
             if (slug) {
                 this.router.navigateByUrl(slug);
             }
