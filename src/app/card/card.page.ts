@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { DataPassService } from '../data-pass.service';
 import { SettingsService } from '../settings.service';
 import { Md5 } from "md5-typescript";
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { AlertController, NavController, LoadingController, Platform } from '@ionic/angular';
 import { ReportService } from '../report.service';
 import * as firebase from 'firebase/app';
