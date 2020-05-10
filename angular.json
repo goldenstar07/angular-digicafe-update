@@ -115,7 +115,8 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
-              }
+              },
+              "src/manifest.json"
             ]
           },
           "configurations": {

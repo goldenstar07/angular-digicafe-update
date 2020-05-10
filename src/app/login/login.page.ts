@@ -16,6 +16,8 @@ export class LoginPage implements OnInit {
   public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
   public language: string = null;
+  public languageShow: string = null;
+
   constructor(private authService: AuthService, 
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
@@ -55,16 +57,26 @@ export class LoginPage implements OnInit {
     this.storage.get('language').then((data) => {
       this.language = !data ? null : data;
       this.translate.use(this.language);
+      if(this.language === 'es'){
+        this.languageShow = "Español"; 
+      } else {
+        this.languageShow = "English"
+      }
     });
     if(!this.language){
       this.translate.setDefaultLang('en');
       this.translate.use('en');
+      this.languageShow = "English"
     }
   }
 
-  segmentChanged(lang){
-    this.storage.set('language', lang.detail.value);
-    this.translate.use(lang.detail.value);
+  saveLanguage(lang){
+    this.language = lang.detail.value;
+    if(this.language === 'es'){
+      this.languageShow = "Español"; 
+    }
+    this.storage.set('language', this.language);
+    this.translate.use(this.language);
   }
 
   async loginUser(loginForm: FormGroup): Promise<void> {

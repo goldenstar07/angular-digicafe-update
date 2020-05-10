@@ -7,6 +7,8 @@ ion-content{
 }
 
 h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
     text-align: center;
     color: var(--ion-color-light);
 }
@@ -15,8 +17,7 @@ h3 {
     padding-top: 20px;
     display: block;
     margin: auto;
-    width: 33%;
-    max-width: 300px;
+    width: 300px;
 }
 
 .invalid {
@@ -30,5 +31,26 @@ h3 {
 } 
 
 .item-inner {
-border-bottom: 0 !important; }
+  border-bottom: 0 !important; }
+}
+
+// ion-segment{
+//     --background: var(--ion-color-light);
+// }
+
+// .segment{
+//     display: flex;
+//     justify-content: center;
+//     text-align: center;
+//     p{
+//         color: #ffffff;
+//     }
+// }
+
+.trns{
+    min-width: 300px;
+}
+
+ion-select{
+    color: #ffffff;
 }

@@ -9,8 +9,7 @@ form {
     padding-top: 20px;
     display: block;
     margin: auto;
-    width: 33%;
-    max-width: 300px;
+    width: 300px;
 }
 
 h3 {
@@ -52,11 +51,19 @@ ion-input {
     }
 }
 
-.card {
+ion-card {
     margin: auto;
-    max-width: 350px;
+    max-width: 500px;
 }
 
 h2 {
     text-align: center;
+}
+
+.trns{
+    min-width: 300px;
+}
+
+ion-select{
+    color: #ffffff;
 }

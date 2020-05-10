@@ -4,13 +4,9 @@ import { ReportService } from '../report.service';
 import { Storage } from '@ionic/storage';
 import { SettingsService } from '../settings.service';
 import { Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
-import { Email } from '@teamhive/capacitor-email';
 const { Filesystem } = Plugins;
-//import * as sgMail from '@sendgrid/mail';
-//import { environment } from 'src/environments/environment';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import * as firebase from 'firebase/app';
-//import {HttpClient} from '@angular/common/http';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({

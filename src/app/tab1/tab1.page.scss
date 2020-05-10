@@ -4,7 +4,6 @@
 
 ion-content{
   --ion-background-color: var(--ion-color-primary);
-  --overflow: hidden;
 }
 
 .splash-logo {
@@ -33,6 +32,6 @@ p {
 
 ion-button {
   text-transform: inherit;
-  max-width: 65%;
+  max-width: 400px;
   margin: auto;
 }

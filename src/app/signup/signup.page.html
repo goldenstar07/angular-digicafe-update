@@ -8,15 +8,24 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-segment (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="en">
-      <ion-label>English</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="es">
-      <ion-label>Español</ion-label>
-    </ion-segment-button>
-  </ion-segment>
   <img class="splash-logo" src='assets/digicafe-logo.svg'>
+  <div class="ion-padding">
+    <!-- <ion-segment color="light" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="en">
+        <ion-label>English</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="es">
+        <ion-label>Español</ion-label>
+      </ion-segment-button>
+    </ion-segment> -->
+    <ion-item class="trns">
+      <ion-label color="light">{{'settings.language' | translate}}</ion-label>
+      <ion-select multiple="false" [(ngModel)]="this.language" (ionChange)="saveLanguage($event)">
+        <ion-select-option value="en">English</ion-select-option> 
+        <ion-select-option value="es">Español</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
   <h3>{{'signup.create' | translate}}</h3>
   <ion-card color="light" class="ion-padding">
     <form [formGroup]="signupForm">
@@ -53,7 +62,7 @@
         <ion-label>{{'signup.passwarn' | translate}}.</ion-label>
       </ion-item>
       <ion-button
-      expand="block" (click)="signupUser(signupForm)" [disabled]="!signupForm.valid"
+      expand="block" shape="round" (click)="signupUser(signupForm)" [disabled]="!signupForm.valid"
       >
       {{'signup.create' | translate}}
       </ion-button>

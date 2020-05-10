@@ -636,11 +636,11 @@ export class Tab3Page{
   }
 
   goToHelp() {
-      location.href = `http://www.digibytecafe.com/faq/`;  
+      location.href = `mailto:support@digitide.us`;  
   }
 
-  connectUphold(){
-    location.href = 'https://sandbox.uphold.com/authorize/fe9cf62a23785a443b6915b4007a0eb10364b4f7?scope=accounts:read%20cards:read%20transactions:deposit%20transactions:read%20transactions:transfer:self%20transactions:withdraw';
-  }
+  // connectUphold(){
+  //   location.href = 'https://sandbox.uphold.com/authorize/fe9cf62a23785a443b6915b4007a0eb10364b4f7?scope=accounts:read%20cards:read%20transactions:deposit%20transactions:read%20transactions:transfer:self%20transactions:withdraw';
+  // }
   
 }

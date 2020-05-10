@@ -14,7 +14,7 @@ export class SignupPage implements OnInit {
   public signupForm: FormGroup;
   public loading: any;
   public language: string = null;
-
+  public languageShow = null;
   constructor(
     private authService: AuthService,
     private loadingCtrl: LoadingController,
@@ -37,10 +37,16 @@ export class SignupPage implements OnInit {
     this.storage.get('language').then((data) => {
       this.language = !data ? null : data;
       this.translate.use(this.language);
+      if(this.language === 'es'){
+        this.languageShow = "Español"; 
+      } else {
+        this.languageShow = "English"
+      }
     });
     if(!this.language){
       this.translate.setDefaultLang('en');
       this.translate.use('en');
+      this.languageShow = "English"
     }
   }
 
@@ -74,6 +80,15 @@ export class SignupPage implements OnInit {
       this.loading = await this.loadingCtrl.create();
       await this.loading.present();
     }
+  }
+
+  saveLanguage(lang){
+    this.language = lang.detail.value;
+    if(this.language === 'es'){
+      this.languageShow = "Español"; 
+    }
+    this.storage.set('language', this.language);
+    this.translate.use(this.language);
   }
 
 }

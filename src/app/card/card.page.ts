@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 import { AlertController, NavController, LoadingController, Platform } from '@ionic/angular';
 import { ReportService } from '../report.service';
 import * as firebase from 'firebase/app';
-import { Email } from '@teamhive/capacitor-email';
+//import { Email } from '@teamhive/capacitor-email';
 
 @Component({
   selector: 'app-card',
@@ -174,7 +174,7 @@ export class CardPage implements OnInit {
               this.loading.dismiss();
               this.receipt = data.receipt_url;
               this.tx = data.id;
-              this.presentConfirmSuccess();
+              //this.presentConfirmSuccess();
             } else {
               console.log(data.status);
               this.loading.dismiss();
@@ -187,22 +187,22 @@ export class CardPage implements OnInit {
     }
   }
 
-  async emailSend(details){
-    const email = new Email();
-    const hasPermission = await email.hasPermission();
-    if(!hasPermission){
-        await email.requestPermission();
-    }
-    const available = await email.isAvailable({});
-    if(available.hasAccount){
-        email.open({
-        to: details.to,
-        subject: details.subject,
-        body: details.body,
-        isHtml: true
-        })
-    }
-  }
+  // async emailSend(details){
+  //   const email = new Email();
+  //   const hasPermission = await email.hasPermission();
+  //   if(!hasPermission){
+  //       await email.requestPermission();
+  //   }
+  //   const available = await email.isAvailable({});
+  //   if(available.hasAccount){
+  //       email.open({
+  //       to: details.to,
+  //       subject: details.subject,
+  //       body: details.body,
+  //       isHtml: true
+  //       })
+  //   }
+  // }
 
 
   // payWithPaypal() {
@@ -291,39 +291,39 @@ export class CardPage implements OnInit {
   //   });
   // }
 
-  async presentConfirmSuccess() {
-    let alert = await this.alertCtrl.create({
-      header: 'Transaction Successful!',
-      message: 'Would you like a receipt?',
-      inputs: [
-        {
-          name: 'email',
-          placeholder: 'Customer Email',
-          type: 'email'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Dismiss',
-          role: 'cancel',
-          handler: () => {
-            this.storeTransactionData();
-            this.navCtrl.navigateBack('tab2');
-          }
-        },
-        {
-          text: 'Receipt',
-          handler: data => {
-            this.storeTransactionData();
-            this.email = data.email;
-            this.emailReceipt(this.email);
-            this.navCtrl.navigateBack('tab2');
-          } 
-        }
-      ]
-    });
-    return await alert.present();
-  }
+  // async presentConfirmSuccess() {
+  //   let alert = await this.alertCtrl.create({
+  //     header: 'Transaction Successful!',
+  //     message: 'Would you like a receipt?',
+  //     inputs: [
+  //       {
+  //         name: 'email',
+  //         placeholder: 'Customer Email',
+  //         type: 'email'
+  //       }
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Dismiss',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           this.storeTransactionData();
+  //           this.navCtrl.navigateBack('tab2');
+  //         }
+  //       },
+  //       {
+  //         text: 'Receipt',
+  //         handler: data => {
+  //           this.storeTransactionData();
+  //           this.email = data.email;
+  //           this.emailReceipt(this.email);
+  //           this.navCtrl.navigateBack('tab2');
+  //         } 
+  //       }
+  //     ]
+  //   });
+  //   return await alert.present();
+  // }
 
   async presentConfirmFail(e) {
     let alert = await this.alertCtrl.create({
@@ -341,15 +341,15 @@ export class CardPage implements OnInit {
     return await alert.present();
   }
 
-  emailReceipt(data){
-    let email = {
-      to: data,
-      subject: `Your Receipt from ${this.business}`,
-      body: `Total: ${this.amount} Purchased: ${this.output} TxID: ${this.tx}. Check your receipt here ${this.receipt}. We appreciate your business, ${this.business}.`,
-      isHtml: true
-    }
-    this.emailSend(email);
-  }
+  // emailReceipt(data){
+  //   let email = {
+  //     to: data,
+  //     subject: `Your Receipt from ${this.business}`,
+  //     body: `Total: ${this.amount} Purchased: ${this.output} TxID: ${this.tx}. Check your receipt here ${this.receipt}. We appreciate your business, ${this.business}.`,
+  //     isHtml: true
+  //   }
+  //   this.emailSend(email);
+  // }
 
   storeTransactionData() {
     let pass = {

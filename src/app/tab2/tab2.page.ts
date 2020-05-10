@@ -64,12 +64,11 @@ export class Tab2Page {
         this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
         this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
         this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
-        //this.stripeId = this.userProfile.stripeId;
         this.key = this.userProfile.encoded;
-          if(!this.digibyteAddress || !this.dgbBittrexAddress){
-            this.confirmAddress();
-          } 
-        });   
+        console.log(this.bitcoinAddress)
+        console.log(this.litecoinAddress)
+        console.log(this.digibyteAddress)
+      });   
     }
     this.storage.get('myCurrency').then((data) => {
         this.currency = !data ? 'USD' : data;
@@ -130,21 +129,21 @@ export class Tab2Page {
     this.calculatePrice();
   }
 
-  async confirmAddress() {
-    const alert = await this.alertCtrl.create({
-      header: 'No DigiByte or Bitcoin Address Saved.',
-      message: 'Enter DGB/BTC Addresses and Email in Settings',
-      buttons: [
-        {
-          text: 'Settings',
-          handler: () => {
-            this.navCtrl.navigateForward('/tabs/tab3');
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // async confirmAddress() {
+  //   const alert = await this.alertCtrl.create({
+  //     header: 'No DigiByte or Bitcoin Address Saved.',
+  //     message: 'Enter a DGB/LTC/BTC Addresses in Settings',
+  //     buttons: [
+  //       {
+  //         text: 'Settings',
+  //         handler: () => {
+  //           this.navCtrl.navigateForward('/tabs/tab3');
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
 
   // async confirmStripe() {
   //   const alert = await this.alertCtrl.create({
@@ -177,7 +176,8 @@ export class Tab2Page {
     addModal.onDidDismiss().then((coin: any) => {
       switch(coin.data){
         case "bitcoin":
-          if(this.bitcoinAddress || this.btcBittrexAddress){
+          if(this.bitcoinAddress.length > 0 || this.btcBittrexAddress.length > 0){
+            console.log(coin.data)
             this.coin = coin.data;
             this.storage.set('coin', this.coin);
             this.toTx();
@@ -187,7 +187,7 @@ export class Tab2Page {
           }
           break;
         case "litecoin":
-          if(this.litecoinAddress || this.ltcBittrexAddress){
+          if(this.litecoinAddress.length > 0 || this.ltcBittrexAddress.length > 0){
             this.coin = coin.data;
             this.storage.set('coin', this.coin);
             this.toTx();
@@ -195,18 +195,9 @@ export class Tab2Page {
             this.coin = coin.data;
             this.confirmAddressExists();
           }
-          break;  
-        // case "card":
-        //   if(!this.stripeId){
-        //     this.confirmStripe();
-        //   }else{
-        //     this.coin = coin.data;
-        //     this.storage.set('coin', this.coin);
-        //     this.toCardTx();
-        //   }
-        //   break;             
+          break;            
         case "digibyte":
-          if(this.digibyteAddress || this.dgbBittrexAddress){
+          if(this.digibyteAddress.length > 0 || this.dgbBittrexAddress.length > 0){
             this.coin = 'digibyte';
             this.storage.set('coin', this.coin);
             this.toTx();

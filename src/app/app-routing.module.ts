@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'reset-password', loadChildren: ()=> import('./reset-password/reset-password.module').then(m=>m.ResetPasswordPageModule) },
   { path: 'signup', loadChildren: ()=> import('./signup/signup.module').then(m=>m.SignupPageModule) },
   { path: 'wallet-send', loadChildren: ()=> import('./wallet-send/wallet-send.module').then(m=>m.WalletSendPageModule),canActivate: [AuthGuard], },
-  { path: 'card', loadChildren: ()=> import('./card/card.module').then(), canActivate: [AuthGuard] },
+  //{ path: 'card', loadChildren: ()=> import('./card/card.module').then(), canActivate: [AuthGuard] },
   {
     path: 'email',
     loadChildren: () => import('./email/email.module').then( m => m.EmailPageModule)
