@@ -65,8 +65,8 @@ export class Tab2Page {
         this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
         this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
         this.key = this.userProfile.encoded;
-        console.log(this.bitcoinAddress)
-        console.log(this.litecoinAddress)
+        console.log(this.bitcoinAddress.length)
+        console.log(this.litecoinAddress.length)
         console.log(this.digibyteAddress)
       });   
     }
@@ -176,34 +176,34 @@ export class Tab2Page {
     addModal.onDidDismiss().then((coin: any) => {
       switch(coin.data){
         case "bitcoin":
-          if(this.bitcoinAddress.length > 0 || this.btcBittrexAddress.length > 0){
+          if(this.bitcoinAddress.length === 0 || this.btcBittrexAddress.length === 0){
+            this.coin = coin.data;
+            this.confirmAddressExists();
+          }else{
             console.log(coin.data)
             this.coin = coin.data;
             this.storage.set('coin', this.coin);
             this.toTx();
-          }else{
-            this.coin = coin.data;
-            this.confirmAddressExists();
           }
           break;
         case "litecoin":
-          if(this.litecoinAddress.length > 0 || this.ltcBittrexAddress.length > 0){
+          if(this.litecoinAddress.length === 0 || this.ltcBittrexAddress.length === 0){
+            this.coin = coin.data;
+            this.confirmAddressExists();
+          }else{
             this.coin = coin.data;
             this.storage.set('coin', this.coin);
             this.toTx();
-          }else{
-            this.coin = coin.data;
-            this.confirmAddressExists();
           }
           break;            
         case "digibyte":
-          if(this.digibyteAddress.length > 0 || this.dgbBittrexAddress.length > 0){
+          if(this.digibyteAddress.length === 0 || this.dgbBittrexAddress.length === 0){
+            this.coin = coin.data;
+            this.confirmAddressExists();
+          } else{
             this.coin = 'digibyte';
             this.storage.set('coin', this.coin);
             this.toTx();
-          } else{
-            this.coin = coin.data;
-            this.confirmAddressExists();
           }
           break;
         default:
