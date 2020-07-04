@@ -23,6 +23,7 @@
             <p *ngIf="tx.txId.length>0 && tx.coin === 'digibyte'" class="item-desc"><a href="https://digiexplorer.info/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <p *ngIf="tx.txId.length>0 && tx.coin === 'bitcoin'" class="item-desc"><a href="https://insight.bitpay.com/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <p *ngIf="tx.txId.length>0 && tx.coin === 'litecoin'" class="item-desc"><a href="https://insight.litecore.io/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
+            <p *ngIf="tx.txId.length>0 && tx.coin === 'ethereum'" class="item-desc"><a href="https://etherscan.io/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <p *ngIf="tx.txId.length>0 && tx.coin === 'card'" class="item-desc">{{tx.txId}}</p>
             <!-- <p class="txid">{{ tx.txId }}</p> -->
           </ion-col>
@@ -60,9 +61,10 @@
     <div>
       <ion-item>
         <h2 class="item-desc3">{{'reports.currency' | translate}}: {{ this.sum | number: '1.2-2' }}</h2> 
-        <p class="item-desc3">DigiByte: {{ this.dgbSum | number: '1.2-6' }}</p>
-        <p class="item-desc3">Litecoin: {{ this.ltcSum | number: '1.2-6' }}</p>
-        <p class="item-desc3">Bitcoin: {{ this.btcSum | number: '1.2-8' }}</p>
+        <p class="item-desc3">DGB: {{ this.dgbSum | number: '1.2-6' }}</p>
+        <p class="item-desc3">LTC: {{ this.ltcSum | number: '1.2-6' }}</p>
+        <p class="item-desc3">BTC: {{ this.btcSum | number: '1.2-8' }}</p>
+        <p class="item-desc3">ETH: {{ this.ethSum | number: '1.2-8' }}</p>
       </ion-item>
       <ion-grid>
         <ion-row>

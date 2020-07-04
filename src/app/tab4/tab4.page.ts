@@ -23,6 +23,7 @@ export class Tab4Page {
   public dgbSum: number = 0.00;
   public btcSum: number = 0.00;
   public ltcSum: number = 0.00;
+  public ethSum: number = 0.00;
   public canEmail: boolean = false;
   public businessEmail: string;
   public userProfile: any;
@@ -71,6 +72,7 @@ export class Tab4Page {
         this.calculateDGB();
         this.calculateLTC();
         this.calculateBTC();
+        this.calculateETH();
         this.calculateCard();
       } else {
         this.transactions = [];
@@ -110,6 +112,13 @@ export class Tab4Page {
   calculateBTC() {
     let transactions = this.filterCoins('bitcoin');
     this.btcSum = transactions.reduce((total, transaction) => {
+    return total + transaction.dgbAmount;
+    }, 0);
+  }
+
+  calculateETH() {
+    let transactions = this.filterCoins('ethereum');
+    this.ethSum = transactions.reduce((total, transaction) => {
     return total + transaction.dgbAmount;
     }, 0);
   }
@@ -210,60 +219,6 @@ export class Tab4Page {
     }
   }
 
-  // async email(details){
-  //   let email = {
-  //     to: 'max@mustermann.de',
-  //     cc: 'erika@mustermann.de',
-  //     bcc: ['john@doe.com', 'jane@doe.com'],
-  //     attachments: [
-  //       'file://img/logo.png',
-  //       'res://icon.png',
-  //       'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
-  //       'file://README.pdf'
-  //     ],
-  //     subject: 'Cordova Icons',
-  //     body: 'How are you? Nice greetings from Leipzig',
-  //     isHtml: true
-  //   }
-  //   // Send a text message using default options
-  //   this.emailComposer.open(email);
-    // this.http.post('https://us-central1-stripe-test-api.cloudfunctions.net/payWithStripe/email', {
-    //   to: this.businessEmail,
-    //   from: "support@digibytecafe.com",
-    //   subject: "Your DigiCafe Report",
-    //   text: "Your exported transaction report.",
-    //   html: "Your exported transaction report.",
-    //   attachments: details
-    // }).subscribe(res => {
-    //   console.log(res);
-    // })
-    // sgMail.setApiKey(environment.sendGrid);
-    // const msg = {
-    //   to: details.to,
-    //   from: this.businessEmail,
-    //   subject: details.subject,
-    //   text: details.body,
-    //   html: details.body,
-    //   attachments: details.attachments
-    // };
-    // sgMail.send(msg);
-    // const email = new Email();
-    // const hasPermission = await email.hasPermission();
-    // if(!hasPermission){
-    //     await email.requestPermission();
-    // }
-    // const available = await email.isAvailable({});
-    // if(available.hasAccount){
-    //     email.open({
-    //     to: details.to,
-    //     subject: details.subject,
-    //     body: details.body,
-    //     isHtml: true,
-    //     attachments: details
-    //     })
-    // }
-  //}
-
   async confirmDelete() {
     const alert = await this.alertCtrl.create({
       header: 'This Will DELETE All Transaction Records.',
@@ -283,6 +238,7 @@ export class Tab4Page {
             this.sum = 0.00;
             this.dgbSum = 0.00;
             this.btcSum = 0.00;
+            this.ethSum = 0.00;
           }
         },
       ]

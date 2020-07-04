@@ -50,6 +50,10 @@ export class SettingsService {
     return this.userProfile.update({ ltcAddress });
   }
 
+  updateEthAddress(ethAddress: string): Promise<any> {
+    return this.userProfile.update({ ethAddress });
+  }
+
   updateDgbBittrexAddress(dgbBittrexAddress: string): Promise<any> {
     return this.userProfile.update({ dgbBittrexAddress });
   }
@@ -60,6 +64,10 @@ export class SettingsService {
 
   updateLtcBittrexAddress(ltcBittrexAddress: string): Promise<any> {
     return this.userProfile.update({ ltcBittrexAddress });
+  }
+
+  updateEthBittrexAddress(ethBittrexAddress: string): Promise<any> {
+    return this.userProfile.update({ ethBittrexAddress });
   }
 
   updateStripeId(stripeId: string): Promise<any> {

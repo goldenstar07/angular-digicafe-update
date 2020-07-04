@@ -7,6 +7,7 @@ import { SettingsService } from '../settings.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { MethodComponent } from '../../app/method/method.component'; 
 import {TranslateService} from '@ngx-translate/core';
+import {WyreService} from '../wyre.service';
 
 @Component({
   selector: 'app-tab2',
@@ -23,20 +24,24 @@ export class Tab2Page {
   userProfile: any;
   business: any;
   key: any;
-  stripeId: string = null;
+  // stripeId: string = null;
   public coin: string = null; 
-  public dgbBittrexAddress: string;
-  public btcBittrexAddress: string;
-  public ltcBittrexAddress: string;
-  public digibyteAddress: string;
-  public bitcoinAddress: string;
-  public litecoinAddress: string;
+  public dgbBittrexAddress: string = null;
+  public btcBittrexAddress: string = null;
+  public ltcBittrexAddress: string = null;
+  public ethBittrexAddress: string = null;
+  public digibyteAddress: string = null;
+  public bitcoinAddress: string = null;
+  public litecoinAddress: string = null;
+  public ethereumAddress: string = null;
   public language: string = null;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, 
     public loadingCtrl: LoadingController, public storage: Storage,
     public alertCtrl: AlertController, private dataPass: DataPassService,
-    private settingsService: SettingsService,  private changeRef: ChangeDetectorRef,
+    private settingsService: SettingsService,
+    public wyre: WyreService,  
+    private changeRef: ChangeDetectorRef,
     public translate: TranslateService) {
       this.storage.get('language').then((data) => {
         this.language = !data ? null : data;
@@ -60,19 +65,20 @@ export class Tab2Page {
         this.digibyteAddress = this.userProfile.digibyteAddress;
         this.bitcoinAddress = this.userProfile.btcAddress;
         this.litecoinAddress = this.userProfile.ltcAddress;
+        this.ethereumAddress = this.userProfile.ethAddress;
         this.businessEmail = this.userProfile.businessEmail;
         this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
         this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
         this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
+        this.ethBittrexAddress = this.userProfile.ethBittrexAddress;
         this.key = this.userProfile.encoded;
-        console.log(this.bitcoinAddress.length)
-        console.log(this.litecoinAddress.length)
-        console.log(this.digibyteAddress)
       });   
     }
     this.storage.get('myCurrency').then((data) => {
         this.currency = !data ? 'USD' : data;
       });
+    
+    //this.wyre.createAccount();
   }
 
   async addItem() {
@@ -176,7 +182,7 @@ export class Tab2Page {
     addModal.onDidDismiss().then((coin: any) => {
       switch(coin.data){
         case "bitcoin":
-          if(this.bitcoinAddress.length === 0 || this.btcBittrexAddress.length === 0){
+          if(!this.bitcoinAddress){
             this.coin = coin.data;
             this.confirmAddressExists();
           }else{
@@ -187,7 +193,7 @@ export class Tab2Page {
           }
           break;
         case "litecoin":
-          if(this.litecoinAddress.length === 0 || this.ltcBittrexAddress.length === 0){
+          if(!this.litecoinAddress){
             this.coin = coin.data;
             this.confirmAddressExists();
           }else{
@@ -197,7 +203,7 @@ export class Tab2Page {
           }
           break;            
         case "digibyte":
-          if(this.digibyteAddress.length === 0 || this.dgbBittrexAddress.length === 0){
+          if(!this.digibyteAddress){
             this.coin = coin.data;
             this.confirmAddressExists();
           } else{
@@ -206,6 +212,16 @@ export class Tab2Page {
             this.toTx();
           }
           break;
+        case "ethereum":
+          if(!this.ethereumAddress){
+            this.coin = coin.data;
+            this.confirmAddressExists();
+          } else{
+            this.coin = coin.data;
+            this.storage.set('coin', this.coin);
+            this.toTx();
+          }
+          break;  
         default:
           this.coin = 'digibyte';
           this.storage.set('coin', this.coin);

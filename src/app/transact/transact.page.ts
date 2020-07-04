@@ -24,7 +24,7 @@ export class TransactPage {
   business: string = null;
   subtotal: number;
   dgb: any;
-  fiat: string;
+  fiat: string = 'USD';
   altRate: number;
   exgRate: number;
   tx: any;
@@ -80,7 +80,7 @@ export class TransactPage {
     private alertCtrl: AlertController, 
     public platform: Platform,
     private emailComposer: EmailComposer,
-    public translate: TranslateService,) {
+    public translate: TranslateService) {
    
     this.tx = {};
     this.dgb = {};
@@ -88,28 +88,6 @@ export class TransactPage {
     this.items = this.dataPass.passedItems.list;
     this.output = this.items.map((i: any) => {
       return `${i.description}`;
-    });
-
-    this.storage.get('myAddress').then(async (data) => {
-      this.address = !data ? null : data;
-    });
-    
-    this.storage.get('partner').then((data) => {
-      this.referral = !data ? null : data;
-    }); 
-
-    this.storage.get('myBusiness').then((data) => {
-      this.business = !data ? null : data;
-    });
-
-    this.storage.get('myBusinessEmail').then((data) => {
-      this.businessEmail = !data ? null : data;
-    }); 
-
-    this.storage.get('myBusinessEmail').then(async (data) => {
-      this.businessEmail = await !data ? null : data;
-      this.hash = await this.getLogoHash();
-      this.logo = await `https://www.gravatar.com/avatar/${this.hash}.jpg`;
     });
         
     this.storage.get('myOptionalTax').then((data) => {
@@ -139,18 +117,13 @@ export class TransactPage {
       this.translate.use('en');
     }
 
+  }
+
+  ionViewWillEnter() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.user = user.uid;
       }  
-    });
-  }
-
-  ionViewWillEnter() {
-    if(!this.language){
-      this.translate.setDefaultLang('en');
-      this.translate.use('en');
-    }
     this.storage.get('coin').then((data) =>{
       this.coin = !data ? "digibyte" : data;
       if(this.user){
@@ -169,12 +142,14 @@ export class TransactPage {
           switch(this.coin){
             case 'digibyte':
               this.address = this.userProfile.digibyteAddress;
+              console.log(this.address)
               if(this.autoSell){
                 this.address = this.userProfile.dgbBittrexAddress;
               }
               break;
             case 'bitcoin':
                 this.address = this.userProfile.btcAddress;
+                this.bID = '408fa195a34b533de9ad9889f076045e';
               if(this.autoSell){
                 this.address = this.userProfile.btcBittrexAddress;
               }
@@ -182,19 +157,23 @@ export class TransactPage {
             case 'litecoin':
               this.address = this.userProfile.ltcAddress;
               this.bID = 'f94be61fd9f4fa684f992ddfd4e92272';
+              if(this.autoSell){
+                this.address = this.userProfile.ltcBittrexAddress;
+              }
+              break;
+            case 'ethereum':
+              this.address = this.userProfile.ethAddress;
+              this.bID = '1c9c969065fcd1cf';  
             if(this.autoSell){
-              this.address = this.userProfile.ltcBittrexAddress;
-              this.bID = 'f94be61fd9f4fa684f992ddfd4e92272';
+              this.address = this.userProfile.ethBittrexAddress;
             }
-            break;  
+            break;    
           };
           this.business = this.userProfile.businessName;
           this.businessEmail = this.userProfile.businessEmail;
           this.hash = await this.getLogoHash();
           this.logo = `https://www.gravatar.com/avatar/${this.hash}.jpg`;
-          this.storage.get('myCurrency').then((data) => {
-            this.fiat = !data ? 'USD' : data;
-          });  
+          this.fiat = this.userProfile.currency;
           if(this.optionalTax){
             this.finalTax = this.subtotal * this.taxRate;
             this.subtotal2 = this.subtotal;
@@ -203,131 +182,41 @@ export class TransactPage {
           } else {
             this.total = this.subtotal;
           }
-            this.storage.get('myCurrency').then((data) => {
-              this.fiat = !data ? 'USD' : data;
-              this.passData = {
-                fiat: this.fiat,
-                amount: this.subtotal,
-                address: this.address,
-                coin: this.coin
+          this.passData = {
+            fiat: this.fiat,
+            amount: this.subtotal,
+            address: this.address,
+            coin: this.coin
+          }
+          console.log(this.passData)
+          this.cryptoService.getURI(this.passData).subscribe((res) => {
+            if(res){
+              console.log(res);
+              this.coinData = res;
+              this.price = this.coinData.price;
+              this.name = this.coinData.name;
+              this.symbol = this.coinData.symbol;
+              this.amount = parseFloat(this.coinData.amount);
+              this.uri = this.coinData.uri;
+              console.log(this.uri);
+              if(this.uri){
+                this.searching = false;
+                this.coinConnect(this.address);
               }
-              console.log(this.passData)
-              this.cryptoService.getURI(this.passData).subscribe((res) => {
-                if(res){
-                  console.log(res);
-                  this.coinData = res;
-                  this.price = this.coinData.price;
-                  this.name = this.coinData.name;
-                  this.symbol = this.coinData.symbol;
-                  this.amount = parseFloat(this.coinData.amount);
-                  //this.generatedAddress = await this.testData.generatedAddress;
-                  this.uri = this.coinData.uri;
-                  console.log(this.uri);
-                  if(this.uri){
-                    this.searching = false;
-                    this.coinConnect(this.address);
-                  }
-                }
-              }); 
-            });  
-          //}      
-        });
+            }
+          }); 
+        });  
+      //}      
       }
+     });
     });                  
   }
 
-  // autoSellBTC(){
-  //   this.storage.get('btc-bittrex').then((data)=>{
-  //     this.txAddress = !data ? null : data;
-  //     this.passData = {
-  //       fiat: this.fiat,
-  //       amount: this.subtotal,
-  //       address: this.txAddress,
-  //       coin: this.coin
-  //     } 
-  //     console.log(this.passData)
-  //     this.cryptoService.getURI(this.passData).subscribe((res) => {
-  //       if(res){
-  //         console.log(res);
-  //         this.coinData = res;
-  //         this.price = this.coinData.price;
-  //         this.name = this.coinData.name;
-  //         this.symbol = this.coinData.symbol;
-  //         this.amount = parseFloat(this.coinData.amount);
-  //         this.uri = this.coinData.uri;
-  //         console.log(this.uri);
-  //         if(this.uri){
-  //           this.searching = false;
-  //           this.coinConnect(this.address);
-  //         }
-  //       }
-  //     });  
-  //   });
-  // }
-
-  // holdBTC(){
-  //   this.storage.get('btc-address').then((data)=>{
-  //     this.txAddress = !data ? null : data;
-  //     this.passData = {
-  //       fiat: this.fiat,
-  //       amount: this.subtotal,
-  //       address: this.txAddress,
-  //       coin: this.coin
-  //     } 
-  //     console.log(this.passData)
-  //     this.cryptoService.getURI(this.passData).subscribe((res) => {
-  //       if(res){
-  //         console.log(res);
-  //         this.coinData = res;
-  //         this.price = this.coinData.price;
-  //         this.name = this.coinData.name;
-  //         this.symbol = this.coinData.symbol;
-  //         this.amount = parseFloat(this.coinData.amount);
-  //         this.uri = this.coinData.uri;
-  //         console.log(this.uri);
-  //         if(this.uri){
-  //           this.searching = false;
-  //           this.coinConnect(this.txAddress);
-  //         }
-  //       }
-  //     });  
-  //   });
-  // }
-
-  // holdDGB(){
-  //   this.storage.get('btc-address').then((data)=>{
-  //     this.txAddress = !data ? null : data;
-  //     this.passData = {
-  //       fiat: this.fiat,
-  //       amount: this.subtotal,
-  //       address: this.txAddress,
-  //       coin: this.coin
-  //     } 
-  //     console.log(this.passData)
-  //     this.cryptoService.getURI(this.passData).subscribe((res) => {
-  //       if(res){
-  //         console.log(res);
-  //         this.coinData = res;
-  //         this.price = this.coinData.price;
-  //         this.name = this.coinData.name;
-  //         this.symbol = this.coinData.symbol;
-  //         this.amount = parseFloat(this.coinData.amount);
-  //         this.uri = this.coinData.uri;
-  //         console.log(this.uri);
-  //         if(this.uri){
-  //           this.searching = false;
-  //           this.coinConnect(this.txAddress);
-  //         }
-  //       }
-  //     });  
-  //   });
-  // }
-
   ionViewWillLeave(){
     clearInterval(this.time);
-    if(this.socket != null){
-      this.socket.disconnect();
-    }
+    // if(this.socket != null){
+    //   this.socket.disconnect();
+    // }
     if(this.w3d != null){
       this.w3d.disconnect();
     }
@@ -335,57 +224,12 @@ export class TransactPage {
 
   coinConnect(address: string){
     switch(this.coin){
-      case 'bitcoin':
-        this.socket = new WebSocket("wss://ws.blockchain.info/inv");
-        this.socket.onopen = (e) => {
-          console.log(e)
-          this.socket.send(JSON.stringify({"op":"addr_sub", "addr":`${address}`}))
-        };
-        this.socket.onmessage =(event) => {
-          console.log(`Bitcoin Received: ${event.data}`);
-          let data = JSON.parse(event.data);
-          data.x.out.find(element =>{
-            console.log(element)
-            if(element.addr === address){
-              let sentAmt = parseFloat(element.value) / 100000000;
-              this.tx = data.x.hash;
-              console.log(this.tx);
-              console.log(sentAmt, this.amount);
-              if(sentAmt === this.amount){
-                this.searching2 = false;
-                this.presentConfirmSuccess(this.tx);
-                this.storeTransactionData();
-                if(this.autoSell){
-                  let data = {
-                    k: this.bittrexKey,
-                    s: this.bittrexSecret
-                  }
-                  this.cryptoService.sellBitcoin('bitcoin', this.amount, data).then((res: any)=>{
-                    console.log(res);
-                  });
-                }
-              }
-            }
-          });
-          this.socket.close();
-        };
-        this.socket.onclose = (event) => {
-          if (event.wasClean) {
-            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-          } else {
-            alert('[close] Connection died');
-          }
-        };
-        break;
-        case 'litecoin': case 'ethereum':
+        case 'litecoin': case 'ethereum': case 'bitcoin':
         this.w3d = new Web3Data(this.w3Key, { blockchainId: this.bID });
         this.w3d.connect()
-        // this.w3d.on({eventName: 'address:transactions', filters: {address: this.address}}, (transaction: any) => {
-        //   console.log(transaction);
-        // });
-        this.w3d.on({eventName: 'address:pending_transactions', filters: {address: this.address}}, (pdtxn: any) => {
+        this.w3d.on({eventName: 'address:pending_transactions', filters: {address: address}}, (pdtxn: any) => {
           console.log('address:pending_transactions', pdtxn);
-          if(this.coin === 'litecoin'){
+          if(this.coin === 'litecoin' || this.coin === 'bitcoin'){
             pdtxn.outputs.find((element: any)=>{
               console.log(element);
               console.log(element.value / 100000000, this.amount)
@@ -430,7 +274,6 @@ export class TransactPage {
         let so = io(this.url, {transports: ['websocket']});
         so.on('connect', () => {
           console.log('Connected');
-        //socket.emit('subscribe', 'inv') // this together with socket.on("tx",) does work
         so.emit('subscribe', this.address);
         so.on(this.address, (tx: any) => {
             console.log("New transaction received: " + JSON.stringify(tx))
@@ -519,8 +362,14 @@ export class TransactPage {
 
 
   async getLogoHash(){
-    let hash = await Md5.init(this.businessEmail);
-    return hash;
+    if(this.businessEmail){
+      let hash = await Md5.init(this.businessEmail);
+      return hash;
+    } else {
+      let hash = await Md5.init('test@digitide.us');
+      return hash;
+    }
+    
   }
 
   async presentConfirmSuccess(hash) {

@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="top-btn" (click)="backWarning()"><ion-icon name="arrow-back"></ion-icon></ion-button>
     </ion-buttons>
@@ -44,6 +44,14 @@
           <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-8' }}</h1>
         </ion-label>
       </ion-item>
+      <ion-item *ngIf="this.coin === 'ethereum'" lines="none">
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/eth.svg">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-8' }}</h1>
+        </ion-label>
+      </ion-item>
       <ion-item *ngIf="this.coin === 'digibyte'" lines="none"> 
         <ion-label text-center>
           <ion-avatar slot="start">
@@ -62,11 +70,6 @@
       <p *ngIf="this.searching2" class="inner-card">{{'transact.checking' | translate}}...<ion-spinner name="dots"></ion-spinner></p>
     </ion-card>
     <hr>
-    <!-- <ion-card *ngIf="this.searching2" class="card2" color="primary">
-      <div class="dgb-due">
-        <p class="dgb-total1">Checking for payment every 10 seconds.</p>
-      </div>
-    </ion-card> -->
   </div>
   <div *ngIf="this.timeOut === true" class="check" padding>
     <ion-button  (click)="checkBlockchain(this.address, this.coin)" shape="round" color="primary" expand="block" [disabled]="!this.uri" (click)="checkConfirms()">

@@ -16,14 +16,14 @@
       <ion-label>
         <p>{{'settings.bname' | translate}}</p>
         <ion-text>{{ this.business }}</ion-text>
-        <ion-text *ngIf="this.business === null || this.business === ''">{{'settings.tap' | translate}} {{'settings.bname' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.business">{{'settings.tap' | translate}} {{'settings.bname' | translate}}.</ion-text>
      </ion-label>
     </ion-item>
     <ion-item (click)="saveEmail()"> 
       <ion-label>
         <p>{{'settings.bemail' | translate}}</p>
         <ion-text>{{ this.businessEmail }}</ion-text>
-        <ion-text *ngIf="this.businessEmail === null || this.businessEmail === ''">{{'settings.tap' | translate}} {{'settings.bemail' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.businessEmail">{{'settings.tap' | translate}} {{'settings.bemail' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
     <ion-item (click)="saveDigiByte()" *ngIf="!this.autoSell"> 
@@ -33,7 +33,7 @@
       <ion-label>
         <p>DigiByte {{'settings.address' | translate}}</p>
         <ion-text>{{ this.externalAddress }}</ion-text>
-        <ion-text *ngIf="this.externalAddress === null || this.externalAddress === ''">{{'settings.tap' | translate}} DigiByte {{'settings.address' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.externalAddress">{{'settings.tap' | translate}} DigiByte {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
     <ion-item (click)="saveLitecoin()" *ngIf="!this.autoSell"> 
@@ -43,7 +43,7 @@
       <ion-label>
         <p>Litecoin {{'settings.address' | translate}}</p>
         <ion-text>{{ this.ltcAddress }}</ion-text>
-        <ion-text *ngIf="this.ltcAddress === null || this.ltcAddress === ''">{{'settings.tap' | translate}} Litecoin {{'settings.address' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.ltcAddress">{{'settings.tap' | translate}} Litecoin {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
     <ion-item (click)="saveBitcoin()" *ngIf="!this.autoSell"> 
@@ -53,7 +53,17 @@
       <ion-label>
         <p>Bitcoin {{'settings.address' | translate}}</p>
         <ion-text>{{ this.btcAddress }}</ion-text>
-        <ion-text *ngIf="this.btcAddress === null || this.btcAddress === ''">{{'settings.tap' | translate}} Bitcoin {{'settings.address' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.btcAddress">{{'settings.tap' | translate}} Bitcoin {{'settings.address' | translate}}.</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="saveEthereum()" *ngIf="!this.autoSell"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/eth.svg">
+      </ion-avatar>
+      <ion-label>
+        <p>Ethereum {{'settings.address' | translate}}</p>
+        <ion-text>{{ this.ethAddress }}</ion-text>
+        <ion-text *ngIf="!this.ethAddress">{{'settings.tap' | translate}} Ethereum {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
     <ion-item *ngIf="this.bittrexKey">
@@ -64,7 +74,7 @@
       <ion-label>
         <p>Bittrex API {{'settings.key' | translate}}</p>
         <ion-text class="password">{{ this.bittrexKey }}</ion-text>
-        <ion-text *ngIf="this.bittrexKey === null || this.bittrexKey === ''">{{'settings.tap' | translate}} Bittrex API {{'settings.key' | translate}}.</ion-text>
+        <ion-text *ngIf="!this.bittrexKey">{{'settings.tap' | translate}} Bittrex API {{'settings.key' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
     <ion-item *ngIf="this.autoSell && this.bittrexKey"> 
@@ -95,6 +105,16 @@
         <p>Bitcoin Bittrex {{'settings.address' | translate}}</p>
         <ion-text>{{ this.btcBittrexAddress }}</ion-text>
         <ion-button size ="small" fill="outline" (click)="saveBitcoinBittrex()" *ngIf="!this.btcBittrexAddress">Fetch {{'settings.address' | translate}}</ion-button>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.autoSell && this.bittrexKey"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/eth.svg">
+      </ion-avatar>
+      <ion-label>
+        <p>Ethereum Bittrex {{'settings.address' | translate}}</p>
+        <ion-text>{{ this.ethBittrexAddress }}</ion-text>
+        <ion-button size ="small" fill="outline" (click)="saveEthereumBittrex()" *ngIf="!this.ethBittrexAddress">Fetch {{'settings.address' | translate}}</ion-button>
       </ion-label>
     </ion-item>
     <!-- <ion-item (click)="connectUphold()">

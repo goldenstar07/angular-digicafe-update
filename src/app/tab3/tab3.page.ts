@@ -24,7 +24,7 @@ export class Tab3Page{
   public externalAddress: any = null;
   public taxRate: number = null;
   public optionalTax: boolean;
-  public currency: string = 'USD';
+  public currency: string;
   public userProfile: any = null;
   public birthDate: Date;
   public businessName: string;
@@ -35,9 +35,11 @@ export class Tab3Page{
   public autoSell: boolean = false;
   public btcAddress: string = null;
   public ltcAddress: string = null;
+  public ethAddress: string = null;
   public dgbBittrexAddress: string;
   public ltcBittrexAddress: string;
   public btcBittrexAddress: string;
+  public ethBittrexAddress: string;
   public bittrexKey: any;
   public bittrexSecret: any;
   public partnerAddress: string;
@@ -55,10 +57,6 @@ export class Tab3Page{
     private changeRef: ChangeDetectorRef, public crypto: CryptoService,
     private clipboardService: ClipboardService,
     public translate: TranslateService) {
-        
-    this.storage.get('myCurrency').then((data) => {
-          this.currency = !data ? 'USD' : data;
-      });
         
     this.storage.get('myTax').then((data) => {
           this.taxRate = !data ? null : data;
@@ -84,44 +82,48 @@ export class Tab3Page{
     if(!this.language){
       this.translate.setDefaultLang('en');
       this.translate.use('en');
-      this.languageShow = "English"
-    }
-
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.uid = user.uid;
-        this.loggedin = true;
-      }
-    });       
+    }      
   }
 
  ionViewWillEnter() {
-    this.changeRef.detectChanges();
-    if(this.uid){
-      this.settingsService
-      .getUserProfile()
-      .get()
-      .then( userProfileSnapshot => {
-        this.userProfile = userProfileSnapshot.data();
-        this.loggedin = true;
-        this.externalAddress = this.userProfile.digibyteAddress;
-        this.business = this.userProfile.businessName;
-        this.businessEmail = this.userProfile.businessEmail;
-        this.btcAddress = this.userProfile.btcAddress;
-        this.ltcAddress = this.userProfile.ltcAddress;
-        this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
-        this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
-        this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
-        //this.stripeId = this.userProfile.stripeId;
-        this.time = environment.key;
-        this.code = `${this.time}${this.uid}`;
-        let decrypt: any = this.userProfile.encoded;
-        if(decrypt){
-          this.bittrexKey = aes256.decrypt(this.code, decrypt.k);
-          this.bittrexSecret = aes256.decrypt(this.code, decrypt.s);
-        }
-      });
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      this.uid = user.uid;
+      this.loggedin = true;
     }
+      if(this.uid){
+        this.settingsService
+        .getUserProfile()
+        .get()
+        .then( userProfileSnapshot => {
+          this.userProfile = userProfileSnapshot.data();
+          this.loggedin = true;
+          this.externalAddress = this.userProfile.digibyteAddress;
+          this.business = this.userProfile.businessName;
+          this.businessEmail = this.userProfile.businessEmail;
+          this.btcAddress = this.userProfile.btcAddress;
+          this.ltcAddress = this.userProfile.ltcAddress;
+          this.ethAddress = this.userProfile.ethAddress;
+          this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
+          this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
+          this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
+          this.ethBittrexAddress = this.userProfile.ethBittrexAddress;
+          //this.stripeId = this.userProfile.stripeId;
+          this.currency = this.userProfile.currency;
+          if(!this.currency){
+            this.currency = 'USD';
+            this.saveCurrency();
+          }
+          this.time = environment.key;
+          this.code = `${this.time}${this.uid}`;
+          let decrypt: any = this.userProfile.encoded;
+          if(decrypt){
+            this.bittrexKey = aes256.decrypt(this.code, decrypt.k);
+            this.bittrexSecret = aes256.decrypt(this.code, decrypt.s);
+          }
+        }); 
+      }
+    });
   }
 
   // async setDGB(){
@@ -283,6 +285,47 @@ export class Tab3Page{
     });
     await alert.present();
   }
+
+  async saveEthereum(): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      subHeader: 'Your Ethereum Address',
+      inputs: [
+        {
+          type: 'text',
+          name: 'ethereumAddress',
+          placeholder: 'Your Ethereum Address',
+          value: this.ethAddress,
+        }
+      ],
+      buttons: [
+        { 
+          text: 'Cancel', 
+          role: 'cancel'
+        }, {
+          text: 'Save',
+          handler: (data) => {
+            this.ethAddress = data.ethereumAddress.trim();
+              if(this.ethAddress.charAt(0) === '0') {
+                if(this.uid){
+                  this.settingsService.updateEthAddress(this.ethAddress);
+                  this.presentToast();
+                }
+              } else if (this.ethAddress === null || this.ethAddress === ''){
+                this.ethAddress = '';
+                if(this.uid){
+                  this.settingsService.updateEthAddress(this.ethAddress);
+                }  
+              } else {
+                this.ethAddress = '';
+                this.addressWarning(data.ethereumAddress);
+              }
+          },
+        },
+      ]
+    });
+    await alert.present();
+  }
+
   async saveLitecoin(): Promise<void> {
     const alert = await this.alertCtrl.create({
       subHeader: 'Your Litecoin "L" or "M" Address',
@@ -412,6 +455,61 @@ export class Tab3Page{
         loading.dismiss();
       } else {
         this.makeDigiByteBittrex();
+        loading.dismiss();
+      } 
+    }).catch(e =>{
+      this.addressWarning(e);
+      loading.dismiss();
+    })
+  }
+
+  async makeEthereumBittrex(): Promise<void> {
+    let loading = await this.loadingCtrl.create({
+      message: 'Requesting Ethereum Address'
+    });
+    loading.present();
+    let data ={
+      k: this.bittrexKey,
+      s: this.bittrexSecret
+    }
+    this.crypto.bittrexProvisionAddress('eth', data).then((res: any) =>{
+      console.log(res);
+      if (res){
+        setTimeout(()=>{
+          this.saveEthereumBittrex();
+          loading.dismiss();
+        }, 5000);
+      } else {
+        loading.dismiss();
+      }
+    }).catch(error => {
+      this.addressWarning(error);
+      loading.dismiss();
+    });
+  }
+
+  async saveEthereumBittrex(): Promise<void> {
+    let loading = await this.loadingCtrl.create({
+      message: 'Accessing Ethereum Address'
+    });
+    loading.present();
+    let data ={
+      k: this.bittrexKey,
+      s: this.bittrexSecret
+    }
+    this.crypto.bittrexGetAddress('eth', data).then((data: any) =>{
+      console.log(data);
+      if (data.status === 'PROVISIONED'){
+        if(this.uid){
+          this.ethBittrexAddress = data.cryptoAddress;
+          this.settingsService.updateEthBittrexAddress(this.ethBittrexAddress);
+        }else{
+          this.ethBittrexAddress = data.cryptoAddress;
+        }
+        this.presentToast();
+        loading.dismiss();
+      } else {
+        this.makeEthereumBittrex();
         loading.dismiss();
       } 
     }).catch(e =>{
@@ -566,6 +664,7 @@ export class Tab3Page{
                   this.saveDigiByteBittrex();
                   this.saveLitecoinBittrex();
                   this.saveBitcoinBittrex();
+                  this.saveEthereumBittrex();
                   setTimeout(()=>{
                     this.presentToast();
                   },5000);

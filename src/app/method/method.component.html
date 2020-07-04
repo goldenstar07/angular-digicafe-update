@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>{{'method.title' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -24,6 +24,13 @@
         <img src="../../assets/btc@2x.png">
       </ion-avatar>
       <p class="start">Bitcoin</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
+    <ion-card (click)="selectCoin('ethereum')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/eth.svg">
+      </ion-avatar>
+      <p class="start">Ethereum</p>
       <p class="end">{{'method.select' | translate}}</p>
     </ion-card>
     <!-- <ion-item (click)="selectCoin('card')" text-wrap>
