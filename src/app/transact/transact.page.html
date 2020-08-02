@@ -52,6 +52,22 @@
           <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-8' }}</h1>
         </ion-label>
       </ion-item>
+      <ion-item *ngIf="this.coin === 'tether'" lines="none">
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/usdt.png">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-2' }}</h1>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="this.coin === 'usd-coin'" lines="none">
+        <ion-label text-center>
+          <ion-avatar slot="start">
+            <img src="../../assets/usdc.png">
+          </ion-avatar>
+          <h1 class="dgb-total"><ion-spinner *ngIf="searching" name="dots"></ion-spinner>{{ this?.amount | number : '1.2-2' }}</h1>
+        </ion-label>
+      </ion-item>
       <ion-item *ngIf="this.coin === 'digibyte'" lines="none"> 
         <ion-label text-center>
           <ion-avatar slot="start">

@@ -212,7 +212,7 @@ export class Tab2Page {
             this.toTx();
           }
           break;
-        case "ethereum":
+        case "ethereum": case "tether":
           if(!this.ethereumAddress){
             this.coin = coin.data;
             this.confirmAddressExists();
@@ -221,7 +221,17 @@ export class Tab2Page {
             this.storage.set('coin', this.coin);
             this.toTx();
           }
-          break;  
+          break; 
+        case "usdc":
+          if(!this.ethereumAddress){
+            this.coin = 'usd-coin';
+            this.confirmAddressExists();
+          } else{
+            this.coin = 'usd-coin';
+            this.storage.set('coin', this.coin);
+            this.toTx();
+          }
+          break;    
         default:
           this.coin = 'digibyte';
           this.storage.set('coin', this.coin);

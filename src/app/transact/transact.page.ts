@@ -47,6 +47,7 @@ export class TransactPage {
   counter: number = 1;
   revealButton: boolean = false;
   key: any = 'No funds received yet!';
+  coinSend: string;
   public coinData: any; 
   public time: any;
   public price: any;
@@ -164,10 +165,17 @@ export class TransactPage {
             case 'ethereum':
               this.address = this.userProfile.ethAddress;
               this.bID = '1c9c969065fcd1cf';  
-            if(this.autoSell){
-              this.address = this.userProfile.ethBittrexAddress;
-            }
-            break;    
+              if(this.autoSell){
+                this.address = this.userProfile.ethBittrexAddress;
+              }
+              break;
+            case 'tether': case 'usd-coin':
+              this.address = this.userProfile.ethAddress;
+              this.bID = '1c9c969065fcd1cf';  
+              if(this.autoSell){
+                this.address = this.userProfile.ethBittrexAddress;
+              }
+              break;    
           };
           this.business = this.userProfile.businessName;
           this.businessEmail = this.userProfile.businessEmail;
@@ -197,7 +205,11 @@ export class TransactPage {
               this.name = this.coinData.name;
               this.symbol = this.coinData.symbol;
               this.amount = parseFloat(this.coinData.amount);
-              this.uri = this.coinData.uri;
+              if(this.coin === 'tether' || this.coin === 'single-collateral-dai'){
+                this.uri = this.address
+              } else {
+                this.uri = this.coinData.uri;
+              }
               console.log(this.uri);
               if(this.uri){
                 this.searching = false;
@@ -224,34 +236,16 @@ export class TransactPage {
 
   coinConnect(address: string){
     switch(this.coin){
-        case 'litecoin': case 'ethereum': case 'bitcoin':
-        this.w3d = new Web3Data(this.w3Key, { blockchainId: this.bID });
-        this.w3d.connect()
-        this.w3d.on({eventName: 'address:pending_transactions', filters: {address: address}}, (pdtxn: any) => {
-          console.log('address:pending_transactions', pdtxn);
-          if(this.coin === 'litecoin' || this.coin === 'bitcoin'){
-            pdtxn.outputs.find((element: any)=>{
-              console.log(element);
-              console.log(element.value / 100000000, this.amount)
-              if(element.value / 100000000 === this.amount){
-                this.searching2 = false;
-                this.tx = pdtxn.hash.toString();
-                this.presentConfirmSuccess(pdtxn.hash);
-                this.storeTransactionData();
-                this.w3d.disconnect();
-                if(this.autoSell){
-                  let data = {
-                      k: this.bittrexKey,
-                      s: this.bittrexSecret
-                    }
-                  this.cryptoService.sellBitcoin(this.coin, this.amount, data).then((res: any)=>{
-                    console.log(res);
-                  });
-                }
-              }
-            })
-          } else {
-            if(pdtxn.value/1000000000000000000 === this.amount){
+      case 'litecoin': case 'ethereum': case 'bitcoin':
+      this.w3d = new Web3Data(this.w3Key, { blockchainId: this.bID });
+      this.w3d.connect()
+      this.w3d.on({eventName: 'address:pending_transactions', filters: {address: address}}, (pdtxn: any) => {
+        console.log('address:pending_transactions', pdtxn);
+        if(this.coin === 'litecoin' || this.coin === 'bitcoin'){
+          pdtxn.outputs.find((element: any)=>{
+            console.log(element);
+            console.log(element.value / 100000000, this.amount)
+            if(element.value / 100000000 === this.amount){
               this.searching2 = false;
               this.tx = pdtxn.hash.toString();
               this.presentConfirmSuccess(pdtxn.hash);
@@ -259,43 +253,90 @@ export class TransactPage {
               this.w3d.disconnect();
               if(this.autoSell){
                 let data = {
-                  k: this.bittrexKey,
-                  s: this.bittrexSecret
-                }
+                    k: this.bittrexKey,
+                    s: this.bittrexSecret
+                  }
                 this.cryptoService.sellBitcoin(this.coin, this.amount, data).then((res: any)=>{
                   console.log(res);
                 });
               }
             }
+          })
+        } else {
+          if(pdtxn.value/1000000000000000000 === this.amount){
+            this.searching2 = false;
+            this.tx = pdtxn.hash.toString();
+            this.presentConfirmSuccess(pdtxn.hash);
+            this.storeTransactionData();
+            this.w3d.disconnect();
+            if(this.autoSell){
+              let data = {
+                k: this.bittrexKey,
+                s: this.bittrexSecret
+              }
+              this.cryptoService.sellBitcoin(this.coin, this.amount, data).then((res: any)=>{
+                console.log(res);
+              });
+            }
+          }
+        }
+      });
+      break;
+    case 'tether': case 'single-collateral-dai': case 'usdc':
+      this.w3d = new Web3Data(this.w3Key);
+      this.w3d.connect()
+      this.w3d.on({eventName:'address:token_transfers', filters: {address: address}}, (transfer: any) => {
+        console.log(transfer)
+        if(transfer.tokenAddress === '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' && transfer.amount / 1000000 === this.amount){
+          this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
+          console.log(this.tx)
+          this.presentConfirmSuccess(this.tx);
+          this.w3d.disconnect();
+        }
+      });
+      break;
+      //const WebSocket = 
+      // const ws = new WebSocket('wss://ws.web3api.io', {headers: {x-api-key: this.w3Key}});
+
+      // ws.on('open', () => {
+      //   ws.send(JSON.stringify({
+      //       jsonrpc: '2.0',
+      //       method: 'subscribe',
+      //       params: ['address:token_transfers', {address: '0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be'}],
+      //       id: 1,
+      //     }));
+      // });
+
+      // ws.on('message', data => {
+      //   console.log(JSON.stringify(JSON.parse(data), null, 2));
+      // });
+      // break;  
+    default:  
+      let so = io(this.url, {transports: ['websocket']});
+      so.on('connect', () => {
+        console.log('Connected');
+      so.emit('subscribe', this.address);
+      so.on(this.address, (tx: any) => {
+          console.log("New transaction received: " + JSON.stringify(tx))
+          if(tx){
+            this.searching2 = false;
+            this.tx = tx.toString();
+            this.presentConfirmSuccess(this.tx);
+            this.storeTransactionData();
+            if(this.autoSell){
+              let data = {
+                k: this.bittrexKey,
+                s: this.bittrexSecret
+              }
+              this.cryptoService.sellBitcoin('digibyte', this.amount, data).then((res: any)=>{
+                console.log(res);
+              });
+            }
+            so.disconnect();
           }
         });
-        break;
-      default:  
-        let so = io(this.url, {transports: ['websocket']});
-        so.on('connect', () => {
-          console.log('Connected');
-        so.emit('subscribe', this.address);
-        so.on(this.address, (tx: any) => {
-            console.log("New transaction received: " + JSON.stringify(tx))
-            if(tx){
-              this.searching2 = false;
-              this.tx = tx.toString();
-              this.presentConfirmSuccess(this.tx);
-              this.storeTransactionData();
-              if(this.autoSell){
-                let data = {
-                  k: this.bittrexKey,
-                  s: this.bittrexSecret
-                }
-                this.cryptoService.sellBitcoin('digibyte', this.amount, data).then((res: any)=>{
-                  console.log(res);
-                });
-              }
-              so.disconnect();
-            }
-          });
-        });
-        break;
+      });
+      break;
     }
   }
 

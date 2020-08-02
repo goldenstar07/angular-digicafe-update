@@ -6,8 +6,8 @@ android {
         applicationId "com.dgbCafe.dgbCafe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 133344
-        versionName "1.4.4"
+        versionCode 170000
+        versionName "1.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

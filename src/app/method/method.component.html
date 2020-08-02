@@ -33,6 +33,20 @@
       <p class="start">Ethereum</p>
       <p class="end">{{'method.select' | translate}}</p>
     </ion-card>
+    <ion-card (click)="selectCoin('tether')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/usdt.png">
+      </ion-avatar>
+      <p class="start">Tether USDT</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
+    <ion-card (click)="selectCoin('usdc')" text-wrap>
+      <ion-avatar item-start>
+        <img src="../../assets/usdc.png">
+      </ion-avatar>
+      <p class="start">USD Coin USDC</p>
+      <p class="end">{{'method.select' | translate}}</p>
+    </ion-card>
     <!-- <ion-item (click)="selectCoin('card')" text-wrap>
       <ion-icon name="card" color="primary" item-start></ion-icon>
       <p>Card Payment</p>
