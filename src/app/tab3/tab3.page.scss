@@ -15,8 +15,22 @@ ion-avatar{
     margin-right: 5px;
     height: 25px;
     width: 25px;
-}  
+}
+
+.smallAvatar{
+    margin-right: 5px;
+    height: 15px;
+    width: 15px;
+}
 
 .uphold{
     width: 150px;
+}
+
+ion-text{
+    font-size: 0.8em;
+}
+
+.smallAddress{
+    font-size: 0.7em;
 }

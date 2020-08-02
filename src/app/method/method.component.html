@@ -5,7 +5,55 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-card (click)="selectCoin('digibyte')">
+    <ion-row>
+      <ion-col size="6">
+        <ion-card (click)="selectCoin('digibyte')">
+          <ion-avatar>
+            <img src="../../assets/dgb@2x.png">
+          </ion-avatar>
+          <p class="start">DigiByte</p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+        <ion-card (click)="selectCoin('litecoin')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/ltc@2x.png">
+          </ion-avatar>
+          <p class="start">Litecoin</p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+        <ion-card (click)="selectCoin('bitcoin')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/btc@2x.png">
+          </ion-avatar>
+          <p class="start">Bitcoin</p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card (click)="selectCoin('ethereum')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/eth.svg">
+          </ion-avatar>
+          <p class="start">Ethereum</p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+        <ion-card (click)="selectCoin('tether')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/usdt.png">
+          </ion-avatar>
+          <p class="start">Tether <span>(USDT)</span></p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+        <ion-card (click)="selectCoin('usdc')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/usdc.png">
+          </ion-avatar>
+          <p class="start">USD Coin <span>(USDC)</span></p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-card (click)="selectCoin('digibyte')">
       <ion-avatar>
         <img src="../../assets/dgb@2x.png">
       </ion-avatar>
@@ -25,8 +73,8 @@
       </ion-avatar>
       <p class="start">Bitcoin</p>
       <p class="end">{{'method.select' | translate}}</p>
-    </ion-card>
-    <ion-card (click)="selectCoin('ethereum')" text-wrap>
+    </ion-card> -->
+    <!-- <ion-card (click)="selectCoin('ethereum')" text-wrap>
       <ion-avatar item-start>
         <img src="../../assets/eth.svg">
       </ion-avatar>
@@ -46,7 +94,7 @@
       </ion-avatar>
       <p class="start">USD Coin USDC</p>
       <p class="end">{{'method.select' | translate}}</p>
-    </ion-card>
+    </ion-card> -->
     <!-- <ion-item (click)="selectCoin('card')" text-wrap>
       <ion-icon name="card" color="primary" item-start></ion-icon>
       <p>Card Payment</p>
@@ -54,7 +102,7 @@
     </ion-item> -->
   </ion-list>
   <div class="ion-padding">  
-    <ion-button shape="round" fill="outline" expand="block" (click)="close()">
+    <ion-button shape="round" fill="outline" (click)="close()">
       {{'method.cancel' | translate}}
     </ion-button>
   </div> 

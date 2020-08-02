@@ -192,7 +192,7 @@ export class TransactPage {
           }
           this.passData = {
             fiat: this.fiat,
-            amount: this.subtotal,
+            amount: this.total,
             address: this.address,
             coin: this.coin
           }
@@ -283,41 +283,29 @@ export class TransactPage {
       });
       break;
     case 'tether': case 'single-collateral-dai': case 'usdc':
+      console.log(this.amount);
       this.w3d = new Web3Data(this.w3Key);
       this.w3d.connect()
       this.w3d.on({eventName:'address:token_transfers', filters: {address: address}}, (transfer: any) => {
         console.log(transfer)
-        if(transfer.tokenAddress === '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' && transfer.amount / 1000000 === this.amount){
+        if((transfer.tokenAddress === '0xdAC17F958D2ee523a2206206994597C13D831ec7' 
+          || transfer.tokenAddress === '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48') 
+          && transfer.amount / 1000000 === this.amount){
           this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
           console.log(this.tx)
           this.presentConfirmSuccess(this.tx);
+          this.storeTransactionData();
           this.w3d.disconnect();
         }
       });
       break;
-      //const WebSocket = 
-      // const ws = new WebSocket('wss://ws.web3api.io', {headers: {x-api-key: this.w3Key}});
-
-      // ws.on('open', () => {
-      //   ws.send(JSON.stringify({
-      //       jsonrpc: '2.0',
-      //       method: 'subscribe',
-      //       params: ['address:token_transfers', {address: '0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be'}],
-      //       id: 1,
-      //     }));
-      // });
-
-      // ws.on('message', data => {
-      //   console.log(JSON.stringify(JSON.parse(data), null, 2));
-      // });
-      // break;  
     default:  
       let so = io(this.url, {transports: ['websocket']});
       so.on('connect', () => {
         console.log('Connected');
       so.emit('subscribe', this.address);
       so.on(this.address, (tx: any) => {
-          console.log("New transaction received: " + JSON.stringify(tx))
+          console.log(tx)
           if(tx){
             this.searching2 = false;
             this.tx = tx.toString();

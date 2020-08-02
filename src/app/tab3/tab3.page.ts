@@ -328,7 +328,7 @@ export class Tab3Page{
 
   async saveLitecoin(): Promise<void> {
     const alert = await this.alertCtrl.create({
-      subHeader: 'Your Litecoin "L" or "M" Address',
+      subHeader: 'Your Litecoin Address',
       inputs: [
         {
           type: 'text',
@@ -346,7 +346,8 @@ export class Tab3Page{
           handler: (data) => {
             this.ltcAddress = data.litecoinAddress.trim();
               if(this.ltcAddress.charAt(0) === 'L'||
-                this.ltcAddress.charAt(0) === 'M') {
+                this.ltcAddress.charAt(0) === 'M' ||
+                this.ltcAddress.substring(0,4) === 'ltc1') {
                 if(this.uid){
                   this.settingsService.updateLtcAddress(this.ltcAddress);
                 }
@@ -369,7 +370,7 @@ export class Tab3Page{
 
   async saveBitcoin(): Promise<void> {
     const alert = await this.alertCtrl.create({
-      subHeader: 'Your Bitcoin "1" or "3" Address',
+      subHeader: 'Your Bitcoin Address',
       inputs: [
         {
           type: 'text',
@@ -387,7 +388,8 @@ export class Tab3Page{
           handler: (data) => {
             this.btcAddress = data.bitcoinAddress.trim();
               if(this.btcAddress.charAt(0) === '1'||
-                this.btcAddress.charAt(0) === '3') {
+                this.btcAddress.charAt(0) === '3' ||
+                this.btcAddress.substring(0,3) === 'bc1') {
                 if(this.uid){
                   this.settingsService.updateBtcAddress(this.btcAddress);
                 }

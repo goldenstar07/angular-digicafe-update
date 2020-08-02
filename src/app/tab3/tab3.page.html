@@ -60,9 +60,15 @@
       <ion-avatar slot="start">
         <img src="../../assets/eth.svg">
       </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/usdt.png">
+      </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/usdc.png">
+      </ion-avatar>
       <ion-label>
         <p>Ethereum {{'settings.address' | translate}}</p>
-        <ion-text>{{ this.ethAddress }}</ion-text>
+        <ion-text class="smallAddress">{{ this.ethAddress }}</ion-text>
         <ion-text *ngIf="!this.ethAddress">{{'settings.tap' | translate}} Ethereum {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
@@ -111,10 +117,16 @@
       <ion-avatar slot="start">
         <img src="../../assets/eth.svg">
       </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/usdt.png">
+      </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/usdc.png">
+      </ion-avatar>
       <ion-label>
-        <p>Ethereum Bittrex {{'settings.address' | translate}}</p>
-        <ion-text>{{ this.ethBittrexAddress }}</ion-text>
-        <ion-button size ="small" fill="outline" (click)="saveEthereumBittrex()" *ngIf="!this.ethBittrexAddress">Fetch {{'settings.address' | translate}}</ion-button>
+        <p>Ethereum Bittrex {{'settings.address' | translate}} & Tokens</p>
+        <ion-text class="smallAddress">{{ this.ethBittrexAddress }}</ion-text>
+        <ion-button size="small" fill="outline" (click)="saveEthereumBittrex()" *ngIf="!this.ethBittrexAddress">Fetch {{'settings.address' | translate}}</ion-button>
       </ion-label>
     </ion-item>
     <!-- <ion-item (click)="connectUphold()">
