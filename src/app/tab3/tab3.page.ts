@@ -49,7 +49,13 @@ export class Tab3Page{
   public code: string = null;
   public language: string = null;
   public languageShow: string = null;
-
+  public wyreId: string = null;
+  public ethWyreAddress: string;
+  public btcWyreAddress: string;
+  public ethWyreLiquidAddress: string;
+  public btcWyreLiquidAddress: string;
+  public wyreActive: boolean = false;
+  public autoSellWyre: boolean = false;
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, 
     public storage: Storage, public toast: ToastController, 
     private authService: AuthService, public loadingCtrl: LoadingController,
@@ -69,6 +75,14 @@ export class Tab3Page{
     this.storage.get('auto-sell').then((data) => {
         this.autoSell= !data ? false : data;
       });
+
+    this.storage.get('wyre-active').then((data) => {
+      this.wyreActive= !data ? false : data;
+    });
+    
+    this.storage.get('wyre-liquidate').then((data) => {
+      this.autoSellWyre= !data ? false : data;
+    });
     
     this.storage.get('language').then((data) => {
       this.language = !data ? null : data;
@@ -104,6 +118,10 @@ export class Tab3Page{
           this.btcAddress = this.userProfile.btcAddress;
           this.ltcAddress = this.userProfile.ltcAddress;
           this.ethAddress = this.userProfile.ethAddress;
+          this.ethWyreAddress = this.userProfile.ethWyreAddress;
+          this.btcWyreAddress = this.userProfile.btcWyreAddress;
+          this.ethWyreLiquidAddress = this.userProfile.liquidEth;
+          this.btcWyreLiquidAddress = this.userProfile.liquidBtc;
           this.dgbBittrexAddress = this.userProfile.dgbBittrexAddress;
           this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
           this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
@@ -177,6 +195,14 @@ export class Tab3Page{
 
   autoSellActive(){
     this.storage.set('auto-sell', this.autoSell);
+  }
+
+  wyreActivate(){
+    this.storage.set('wyre-active', this.wyreActive);
+  }
+
+  wyreLiquidate(){
+    this.storage.set('wyre-liquidate', this.autoSellWyre);
   }
 
   editTaxRate(){

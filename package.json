@@ -40,7 +40,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "aes256": "^1.0.4",
     "ajv": "^6.10.0",
-    "angularx-qrcode": "^1.5.3",
+    "angularx-qrcode": "^2.3.5",
     "browserfs": "^1.4.3",
     "buffer": "^5.5.0",
     "bufferutil": "^4.0.1",

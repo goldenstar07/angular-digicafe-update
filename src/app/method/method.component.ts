@@ -9,7 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class MethodComponent implements OnInit {
   public language: string = null;
-
+  public wyreActive: boolean = false;
   constructor(public modalCtrl: ModalController,
     private storage: Storage,
     public translate: TranslateService) { 
@@ -24,6 +24,9 @@ export class MethodComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.storage.get('wyre-active').then((data) => {
+      this.wyreActive= !data ? false : data;
+    });
   }
 
   selectCoin(coin: string){

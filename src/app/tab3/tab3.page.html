@@ -12,6 +12,9 @@
 
 <ion-content>
   <ion-list>
+    <ion-item color="light">
+      <p>Settings</p>
+    </ion-item>
     <ion-item (click)="saveBusiness()"> 
       <ion-label>
         <p>{{'settings.bname' | translate}}</p>
@@ -26,7 +29,7 @@
         <ion-text *ngIf="!this.businessEmail">{{'settings.tap' | translate}} {{'settings.bemail' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
-    <ion-item (click)="saveDigiByte()" *ngIf="!this.autoSell"> 
+    <ion-item (click)="saveDigiByte()" *ngIf="!this.autoSell && !this.wyreActive"> 
       <ion-avatar slot="start">
         <img src="../../assets/dgb@2x.png">
       </ion-avatar>
@@ -36,7 +39,7 @@
         <ion-text *ngIf="!this.externalAddress">{{'settings.tap' | translate}} DigiByte {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
-    <ion-item (click)="saveLitecoin()" *ngIf="!this.autoSell"> 
+    <ion-item (click)="saveLitecoin()" *ngIf="!this.autoSell && !this.wyreActive"> 
       <ion-avatar slot="start">
         <img src="../../assets/ltc@2x.png">
       </ion-avatar>
@@ -46,7 +49,7 @@
         <ion-text *ngIf="!this.ltcAddress">{{'settings.tap' | translate}} Litecoin {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
-    <ion-item (click)="saveBitcoin()" *ngIf="!this.autoSell"> 
+    <ion-item (click)="saveBitcoin()" *ngIf="!this.autoSell && !this.wyreActive"> 
       <ion-avatar slot="start">
         <img src="../../assets/btc@2x.png">
       </ion-avatar>
@@ -56,7 +59,7 @@
         <ion-text *ngIf="!this.btcAddress">{{'settings.tap' | translate}} Bitcoin {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
-    <ion-item (click)="saveEthereum()" *ngIf="!this.autoSell"> 
+    <ion-item (click)="saveEthereum()" *ngIf="!this.autoSell && !this.wyreActive"> 
       <ion-avatar slot="start">
         <img src="../../assets/eth.svg">
       </ion-avatar>
@@ -72,9 +75,49 @@
         <ion-text *ngIf="!this.ethAddress">{{'settings.tap' | translate}} Ethereum {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
+    <ion-item *ngIf="this.ethWyreAddress && this.btcWyreAddress" color="light">
+      <p>Wyre Settings</p>
+    </ion-item>
+    <ion-item *ngIf="this.ethWyreAddress && this.btcWyreAddress">
+      <ion-label>{{'settings.activate' | translate}} Wyre</ion-label>
+      <ion-toggle slot="end" color="primary" (ionChange)="wyreActivate()" [(ngModel)]="wyreActive" checked="true"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="this.wyreActive && this.ethWyreLiquidAddress && this.btcWyreLiquidAddress">
+      <ion-label>{{'settings.liquidate' | translate}} Wyre</ion-label>
+      <ion-toggle slot="end" color="primary" (ionChange)="wyreLiquidate()" [(ngModel)]="autoSellWyre" checked="true"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="this.wyreActive"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/btc@2x.png">
+      </ion-avatar>
+      <ion-label>
+        <p>Bitcoin Wyre {{'settings.address' | translate}}</p>
+        <ion-text *ngIf="this.wyreActive && !this.autoSellWyre">Hold: {{ this.btcWyreAddress }}</ion-text>
+        <ion-text *ngIf="this.wyreActive && this.autoSellWyre">Liquidate: {{ this.btcWyreLiquidAddress }}</ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="this.wyreActive"> 
+      <ion-avatar slot="start">
+        <img src="../../assets/eth.svg">
+      </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/dai.png">
+      </ion-avatar>
+      <ion-avatar slot="end">
+        <img src="../../assets/usdc.png">
+      </ion-avatar>
+      <ion-label>
+        <p>Ethereum Wyre {{'settings.address' | translate}} & Tokens</p>
+        <ion-text *ngIf="this.wyreActive && !this.autoSellWyre" class="smallAddress">Hold: {{ this.ethWyreAddress }}</ion-text>
+        <ion-text *ngIf="this.wyreActive && this.autoSellWyre" class="smallAddress">Liquidate: {{ this.ethWyreLiquidAddress }}</ion-text>
+      </ion-label>
+    </ion-item>
     <ion-item *ngIf="this.bittrexKey">
       <ion-label>{{'settings.auto' | translate}} Bittrex</ion-label>
       <ion-toggle slot="end" color="primary" (ionChange)="autoSellActive()" [(ngModel)]="autoSell" checked="true"></ion-toggle>
+    </ion-item>
+    <ion-item color="light">
+      <p>Bittrex Settings</p>
     </ion-item>
     <ion-item (click)="saveBittrexKey()"> 
       <ion-label>

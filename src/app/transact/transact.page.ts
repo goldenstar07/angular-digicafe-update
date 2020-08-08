@@ -127,6 +127,7 @@ export class TransactPage {
       }  
     this.storage.get('coin').then((data) =>{
       this.coin = !data ? "digibyte" : data;
+      console.log(this.coin)
       if(this.user){
         this.settingsService
         .getUserProfile()
@@ -169,7 +170,7 @@ export class TransactPage {
                 this.address = this.userProfile.ethBittrexAddress;
               }
               break;
-            case 'tether': case 'usd-coin':
+            case 'tether': case 'usd-coin': case 'multi-collateral-dai':
               this.address = this.userProfile.ethAddress;
               this.bID = '1c9c969065fcd1cf';  
               if(this.autoSell){
@@ -205,7 +206,9 @@ export class TransactPage {
               this.name = this.coinData.name;
               this.symbol = this.coinData.symbol;
               this.amount = parseFloat(this.coinData.amount);
-              if(this.coin === 'tether' || this.coin === 'single-collateral-dai'){
+              if(this.coin === 'tether' || 
+              this.coin === 'multi-collateral-dai' ||
+              this.coin === 'usd-coin'){
                 this.uri = this.address
               } else {
                 this.uri = this.coinData.uri;
@@ -282,7 +285,7 @@ export class TransactPage {
         }
       });
       break;
-    case 'tether': case 'single-collateral-dai': case 'usdc':
+    case 'tether': case 'multi-collateral-dai': case 'usd-coin':
       console.log(this.amount);
       this.w3d = new Web3Data(this.w3Key);
       this.w3d.connect()

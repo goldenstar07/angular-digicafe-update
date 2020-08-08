@@ -30,7 +30,9 @@
         "local-tax": "Local Tax Rate",
         "transact": "Transact",
         "help": "Help",
-        "language": "Language"
+        "language": "Language",
+        "activate": "Activate",
+        "liquidate": "Liquidate"
     },
     "method": {
         "title": "Payment Method",

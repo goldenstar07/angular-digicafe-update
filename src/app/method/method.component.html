@@ -37,11 +37,18 @@
           <p class="start">Ethereum</p>
           <!-- <p class="end">{{'method.select' | translate}}</p> -->
         </ion-card>
-        <ion-card (click)="selectCoin('tether')" text-wrap>
+        <ion-card *ngIf="!this.wyreActive" (click)="selectCoin('tether')" text-wrap>
           <ion-avatar item-start>
             <img src="../../assets/usdt.png">
           </ion-avatar>
           <p class="start">Tether <span>(USDT)</span></p>
+          <!-- <p class="end">{{'method.select' | translate}}</p> -->
+        </ion-card>
+        <ion-card *ngIf="this.wyreActive" (click)="selectCoin('dai')" text-wrap>
+          <ion-avatar item-start>
+            <img src="../../assets/dai.png">
+          </ion-avatar>
+          <p class="start">Dai <span>(DAI)</span></p>
           <!-- <p class="end">{{'method.select' | translate}}</p> -->
         </ion-card>
         <ion-card (click)="selectCoin('usdc')" text-wrap>

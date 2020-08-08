@@ -212,26 +212,23 @@ export class Tab2Page {
             this.toTx();
           }
           break;
-        case "ethereum": case "tether":
+        case "ethereum": case "tether": case "usdc": case "dai":
           if(!this.ethereumAddress){
             this.coin = coin.data;
             this.confirmAddressExists();
           } else{
-            this.coin = coin.data;
+            if(coin.data === 'usdc'){
+              this.coin = 'usd-coin';
+            } else if(coin.data === 'dai'){
+              this.coin = 'multi-collateral-dai';
+            } else {
+              this.coin = coin.data;
+              console.log("else", coin.data)
+            }
             this.storage.set('coin', this.coin);
             this.toTx();
           }
           break; 
-        case "usdc":
-          if(!this.ethereumAddress){
-            this.coin = 'usd-coin';
-            this.confirmAddressExists();
-          } else{
-            this.coin = 'usd-coin';
-            this.storage.set('coin', this.coin);
-            this.toTx();
-          }
-          break;    
         default:
           this.coin = 'digibyte';
           this.storage.set('coin', this.coin);
