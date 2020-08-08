@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
   public loading: HTMLIonLoadingElement;
   public language: string = null;
   public languageShow: string = null;
-
+  public username: string;
   constructor(private authService: AuthService, 
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
@@ -35,10 +35,10 @@ export class LoginPage implements OnInit {
       ],
     });
 
-    // this.storage.get('language').then((data) => {
-    //   console.log(data)
-    //   this.language = !data ? null : data;
-    // });
+    this.storage.get('user-save').then((data) => {
+      console.log(data)
+      this.username = !data ? null : data;
+    });
   }
 
   ngOnInit() {
@@ -79,6 +79,10 @@ export class LoginPage implements OnInit {
     this.translate.use(this.language);
   }
 
+  saveUsername(name){
+    this.storage.set('user-save', name);
+  }
+
   async loginUser(loginForm: FormGroup): Promise<void> {
     if (!loginForm.valid) {
       console.log('Form is not valid yet, current value:', loginForm.value);
@@ -88,11 +92,15 @@ export class LoginPage implements OnInit {
   
       const email = loginForm.value.email;
       const password = loginForm.value.password;
-  
+      this.saveUsername(email);
       this.authService.loginUser(email, password).then(
-        () => {
+        (res) => {
           this.loading.dismiss().then(() => {
-            this.router.navigateByUrl('/tabs/tab3');
+            if(res.user.emailVerified){
+              this.router.navigateByUrl('/tabs/tab3');
+            } else {
+              this.sendVerificationEmail(res.user);
+            }
           });
         },
         error => {
@@ -106,5 +114,13 @@ export class LoginPage implements OnInit {
         }
       );
     }
+  }
+
+  sendVerificationEmail(user){
+    user.sendEmailVerification().then(function() {
+      alert('Verification email sent! Check you inbox or junk folder.')
+    }).catch(function(error) {
+      alert(error)
+    });
   }
 }

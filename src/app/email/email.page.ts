@@ -7,6 +7,8 @@ import 'firebase/auth';
 import {TranslateService} from '@ngx-translate/core';
 import {Storage} from '@ionic/storage';
 import { AlertController } from '@ionic/angular';
+import {environment} from '../../environments/environment';
+
 @Component({
   selector: 'app-email',
   templateUrl: './email.page.html',
@@ -15,6 +17,9 @@ import { AlertController } from '@ionic/angular';
 export class EmailPage implements OnInit {
   public passwordForm: FormGroup;
   public language: string = null;
+  public mode: any;
+  public code: any;
+  public verify: boolean;
 
   constructor(private authService: AuthService,  
     private fb: FormBuilder,
@@ -39,21 +44,27 @@ export class EmailPage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.mode = this.route.snapshot.queryParams['mode']
+    this.code = this.route.snapshot.queryParams['oobCode'];
+    console.log(this.mode)
+    if(this.mode === 'verifyEmail'){
+      this.verify = true;
+      this.handleVerifyEmail();
+    }
   }
 
   handleResetPassword(passwordForm: FormGroup) {
-    const auth = firebase.auth();
-    const code = this.route.snapshot.queryParams['oobCode'];
+    // const app = firebase.initializeApp(environment.firebaseConfig);
+    // const auth = firebase.auth();
     const pw = passwordForm.value.password;
     const pwc = passwordForm.value.passwordConfirm;
     if (pw !== pwc) {
-      // react to error
+      alert('Passwords do not match!')
       return;
     } else{
-      auth.verifyPasswordResetCode(code).then((email) => {
+      firebase.auth().verifyPasswordResetCode(this.code).then((email) => {
         console.log(email)
-        auth.confirmPasswordReset(code, pw).then(async(resp) =>{
+        firebase.auth().confirmPasswordReset(this.code, pw).then(async(resp) =>{
           const alert = await this.alertCtrl.create({
             message: "Log In With New Password",
             buttons: [
@@ -81,5 +92,15 @@ export class EmailPage implements OnInit {
         await alert.present();
       });
     }
-  }  
+  } 
+  
+  handleVerifyEmail() {
+    firebase.auth().applyActionCode(this.code).then((resp) =>{
+      alert('Your email is verified!');
+      this.router.navigateByUrl('login');
+    }).catch((error) =>{
+      alert(error);
+      this.router.navigateByUrl('login');
+    });
+  }
 }

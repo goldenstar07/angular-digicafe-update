@@ -22,6 +22,7 @@ export class AuthService {
   }
 
   signupUser(email: string, password: string): Promise<any> {
+
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -29,7 +30,13 @@ export class AuthService {
         firebase
           .firestore()
           .doc(`/userProfile/${newUserCredential.user.uid}`)
-          .set({ email });
+          .set({ email }).then(() =>{
+            newUserCredential.user.sendEmailVerification().then(function() {
+              alert('Verification email sent! Check you inbox or junk folder.')
+            }).catch(function(error) {
+              alert(error)
+            });
+          })
       })
       .catch(error => {
         console.error(error);

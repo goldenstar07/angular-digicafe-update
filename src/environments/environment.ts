@@ -13,7 +13,11 @@ export const environment = {
     storageBucket: "digicafe-dashboard.appspot.com",
     messagingSenderId: "489467683111"
   },
-  sendGrid: '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'
+  sendGrid: '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',
+  w3key: 'UAKcccc4c043fbc857a15efbc5f1319ba98',
+  tether: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+  usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  dai: '0x6b175474e89094c44da98b954eedeac495271d0f'
 };
 
 /*

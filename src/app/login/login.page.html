@@ -1,8 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
@@ -36,6 +36,7 @@
             <ion-item color="light">
               <ion-label position="stacked">{{'login.email' | translate}}</ion-label>
               <ion-input
+                value="{{this.username}}"
                 formControlName="email"
                 type="email"
                 placeholder="Your email address"

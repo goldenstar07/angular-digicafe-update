@@ -102,6 +102,7 @@ export class Tab3Page{
  ionViewWillEnter() {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
+      console.log(user.emailVerified)
       this.uid = user.uid;
       this.loggedin = true;
     }
@@ -195,14 +196,18 @@ export class Tab3Page{
 
   autoSellActive(){
     this.storage.set('auto-sell', this.autoSell);
+    this.storage.set('wyre-active', false);
+    this.storage.set('wyre-liquidate', false);
   }
 
   wyreActivate(){
     this.storage.set('wyre-active', this.wyreActive);
+    this.storage.set('auto-sell', false);
   }
 
   wyreLiquidate(){
     this.storage.set('wyre-liquidate', this.autoSellWyre);
+    this.storage.set('auto-sell', false);
   }
 
   editTaxRate(){

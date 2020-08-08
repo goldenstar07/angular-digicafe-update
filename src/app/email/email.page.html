@@ -1,11 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>{{'password.title' | translate}}</ion-title>
+    <ion-title *ngIf="!this.verify">{{'password.title' | translate}}</ion-title>
+    <ion-title *ngIf="this.verify">Email Verification</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="passwordForm">
+  <form *ngIf="!this.verify" [formGroup]="passwordForm">
     <ion-item>
       <ion-label position="stacked">{{'login.password' | translate}}</ion-label>
       <ion-input
@@ -46,4 +47,5 @@
       {{'login.login' | translate}}
     </ion-button>
   </form>
+  <h2 *ngIf="this.verify">DigiCafe Email Verification</h2>
 </ion-content>

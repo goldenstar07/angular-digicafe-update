@@ -60,11 +60,10 @@ export class SignupPage implements OnInit {
     } else {
       const email: string = signupForm.value.email;
       const password: string = signupForm.value.password;
-  
       this.authService.signupUser(email, password).then(
         () => {
           this.loading.dismiss().then(() => {
-            this.router.navigateByUrl('home');
+            //this.router.navigateByUrl('home');
           });
         },
         error => {

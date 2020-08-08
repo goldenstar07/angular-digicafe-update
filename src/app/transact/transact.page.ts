@@ -69,11 +69,12 @@ export class TransactPage {
   public code: string = null;
   public bittrexKey: any;
   public bittrexSecret: any;
-  public w3Key: string = 'UAKcccc4c043fbc857a15efbc5f1319ba98';
   public bID = '';
   public socket: any = null;
   public w3d: any = null;
   public language: string = null;
+  public wyreActive: boolean = false;
+  public autoSellWyre: boolean = false;
 
   constructor(public navCtrl: NavController, public cryptoService: CryptoService,
     public storage: Storage, public dataPass: DataPassService, private settingsService: SettingsService,
@@ -105,6 +106,14 @@ export class TransactPage {
     
     this.storage.get('auto-sell').then((data) => {
       this.autoSell = !data ? false : data;
+    });
+
+    this.storage.get('wyre-active').then((data) => {
+      this.wyreActive = !data ? false : data;
+    });
+    
+    this.storage.get('wyre-liquidate').then((data) => {
+      this.autoSellWyre = !data ? false : data;
     });
     
     this.timeOut = false;
@@ -154,6 +163,10 @@ export class TransactPage {
                 this.bID = '408fa195a34b533de9ad9889f076045e';
               if(this.autoSell){
                 this.address = this.userProfile.btcBittrexAddress;
+              } else if(this.wyreActive && !this.autoSellWyre){
+                this.address = this.userProfile.btcWyreAddress;
+              } else if(this.wyreActive && this.autoSellWyre){
+                this.address = this.userProfile.liquidBtc;
               }
               break;
             case 'litecoin':
@@ -163,18 +176,15 @@ export class TransactPage {
                 this.address = this.userProfile.ltcBittrexAddress;
               }
               break;
-            case 'ethereum':
+            case 'ethereum': case 'tether': case 'usd-coin': case 'multi-collateral-dai':
               this.address = this.userProfile.ethAddress;
               this.bID = '1c9c969065fcd1cf';  
               if(this.autoSell){
                 this.address = this.userProfile.ethBittrexAddress;
-              }
-              break;
-            case 'tether': case 'usd-coin': case 'multi-collateral-dai':
-              this.address = this.userProfile.ethAddress;
-              this.bID = '1c9c969065fcd1cf';  
-              if(this.autoSell){
-                this.address = this.userProfile.ethBittrexAddress;
+              } else if(this.wyreActive && !this.autoSellWyre){
+                this.address = this.userProfile.ethWyreAddress;
+              } else if(this.wyreActive && this.autoSellWyre){
+                this.address = this.userProfile.liquidEth;
               }
               break;    
           };
@@ -205,13 +215,14 @@ export class TransactPage {
               this.price = this.coinData.price;
               this.name = this.coinData.name;
               this.symbol = this.coinData.symbol;
-              this.amount = parseFloat(this.coinData.amount);
               if(this.coin === 'tether' || 
               this.coin === 'multi-collateral-dai' ||
               this.coin === 'usd-coin'){
                 this.uri = this.address
+                this.amount = parseFloat(this.coinData.amount.toFixed(2));
               } else {
                 this.uri = this.coinData.uri;
+                this.amount = parseFloat(this.coinData.amount);
               }
               console.log(this.uri);
               if(this.uri){
@@ -240,7 +251,7 @@ export class TransactPage {
   coinConnect(address: string){
     switch(this.coin){
       case 'litecoin': case 'ethereum': case 'bitcoin':
-      this.w3d = new Web3Data(this.w3Key, { blockchainId: this.bID });
+      this.w3d = new Web3Data(environment.w3key, { blockchainId: this.bID });
       this.w3d.connect()
       this.w3d.on({eventName: 'address:pending_transactions', filters: {address: address}}, (pdtxn: any) => {
         console.log('address:pending_transactions', pdtxn);
@@ -287,12 +298,13 @@ export class TransactPage {
       break;
     case 'tether': case 'multi-collateral-dai': case 'usd-coin':
       console.log(this.amount);
-      this.w3d = new Web3Data(this.w3Key);
+      this.w3d = new Web3Data(environment.w3key);
       this.w3d.connect()
       this.w3d.on({eventName:'address:token_transfers', filters: {address: address}}, (transfer: any) => {
         console.log(transfer)
-        if((transfer.tokenAddress === '0xdAC17F958D2ee523a2206206994597C13D831ec7' 
-          || transfer.tokenAddress === '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48') 
+        if((transfer.tokenAddress === environment.dai 
+          || transfer.tokenAddress === environment.tether
+          || transfer.tokenAddress === environment.usdc) 
           && transfer.amount / 1000000 === this.amount){
           this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
           console.log(this.tx)

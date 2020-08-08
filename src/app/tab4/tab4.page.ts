@@ -24,6 +24,9 @@ export class Tab4Page {
   public btcSum: number = 0.00;
   public ltcSum: number = 0.00;
   public ethSum: number = 0.00;
+  public daiSum: number = 0.00;
+  public usdtSum: number = 0.00;
+  public usdcSum: number = 0.00;
   public canEmail: boolean = false;
   public businessEmail: string;
   public userProfile: any;
@@ -73,6 +76,9 @@ export class Tab4Page {
         this.calculateLTC();
         this.calculateBTC();
         this.calculateETH();
+        this.calculateDAI();
+        this.calculateUSDC();
+        this.calculateUSDT();
         this.calculateCard();
       } else {
         this.transactions = [];
@@ -119,6 +125,27 @@ export class Tab4Page {
   calculateETH() {
     let transactions = this.filterCoins('ethereum');
     this.ethSum = transactions.reduce((total, transaction) => {
+    return total + transaction.dgbAmount;
+    }, 0);
+  }
+
+  calculateDAI() {
+    let transactions = this.filterCoins('multi-collateral-dai');
+    this.daiSum = transactions.reduce((total, transaction) => {
+    return total + transaction.dgbAmount;
+    }, 0);
+  }
+
+  calculateUSDT() {
+    let transactions = this.filterCoins('tether');
+    this.usdtSum = transactions.reduce((total, transaction) => {
+    return total + transaction.dgbAmount;
+    }, 0);
+  }
+
+  calculateUSDC() {
+    let transactions = this.filterCoins('usd-coin');
+    this.usdcSum = transactions.reduce((total, transaction) => {
     return total + transaction.dgbAmount;
     }, 0);
   }
