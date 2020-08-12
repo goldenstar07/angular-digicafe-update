@@ -302,10 +302,16 @@ export class TransactPage {
       this.w3d.connect()
       this.w3d.on({eventName:'address:token_transfers', filters: {address: address}}, (transfer: any) => {
         console.log(transfer)
-        if((transfer.tokenAddress === environment.dai 
-          || transfer.tokenAddress === environment.tether
+        if((transfer.tokenAddress === environment.tether
           || transfer.tokenAddress === environment.usdc) 
           && transfer.amount / 1000000 === this.amount){
+          this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
+          console.log(this.tx)
+          this.presentConfirmSuccess(this.tx);
+          this.storeTransactionData();
+          this.w3d.disconnect();
+        } else if (transfer.tokenAddress === environment.dai && 
+          transfer.amount / 1000000000000000000 === this.amount ) {
           this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
           console.log(this.tx)
           this.presentConfirmSuccess(this.tx);
