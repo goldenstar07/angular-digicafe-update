@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:489467683111:android:a9393a16ceaa24f08f4902",
+        "mobilesdk_app_id": "1:489467683111:android:e493c5d5fb4e1efd8f4902",
         "android_client_info": {
           "package_name": "com.dgbCafe.dgbCafe"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "489467683111-kim2lauqob6shtomcpatoerqlpgjj1b9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.dgbCafe.dgbCafe",
-            "certificate_hash": "07428d2cf98e09f43f592d154ca034a64de3423e"
-          }
-        },
         {
           "client_id": "489467683111-su8rgk7okqfsr7cqvsma887ufcaunpik.apps.googleusercontent.com",
           "client_type": 3

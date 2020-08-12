@@ -56,6 +56,9 @@ export class Tab3Page{
   public btcWyreLiquidAddress: string;
   public wyreActive: boolean = false;
   public autoSellWyre: boolean = false;
+  public subscription: string;
+  public active: string;
+  
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, 
     public storage: Storage, public toast: ToastController, 
     private authService: AuthService, public loadingCtrl: LoadingController,
@@ -127,6 +130,7 @@ export class Tab3Page{
           this.ltcBittrexAddress = this.userProfile.ltcBittrexAddress;
           this.btcBittrexAddress = this.userProfile.btcBittrexAddress;
           this.ethBittrexAddress = this.userProfile.ethBittrexAddress;
+          this.subscription = this.userProfile.stripeSubscription;
           //this.stripeId = this.userProfile.stripeId;
           this.currency = this.userProfile.currency;
           if(!this.currency){
@@ -140,31 +144,22 @@ export class Tab3Page{
             this.bittrexKey = aes256.decrypt(this.code, decrypt.k);
             this.bittrexSecret = aes256.decrypt(this.code, decrypt.s);
           }
+          if(this.subscription){
+            this.getSubscriptionStatus(this.subscription);
+          }
         }); 
       }
     });
   }
 
-  // async setDGB(){
-  //   let loading = await this.loadingCtrl.create({
-  //     message: 'Creating Wallet...'
-  //   });
-  //   loading.present();
-  //   setTimeout(()=>{
-  //     this.crypto.setAddress();
-  //     //createLtcBtcDgb(coin, data.Password.trim());
-  //     setTimeout(()=>{
-  //       this.loadNewWallet();
-  //       loading.dismiss();
-  //     }, 3000);
-  //   },2000);
-  // }
-
-  // loadNewWallet(){
-  //   this.storage.get('digibyte').then(res =>{
-  //     this.dgbAddress = res.address;
-  //   })
-  // }
+  getSubscriptionStatus(subscription: string){
+    this.crypto.checkSubscription(subscription).subscribe((res: any) =>{
+      console.log(res)
+      if(res.status){
+        this.active = res.status;
+      }
+    });
+  }
 
   logOut(): void {
     this.authService.logoutUser().then( () => {

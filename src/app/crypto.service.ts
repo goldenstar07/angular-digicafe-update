@@ -85,7 +85,16 @@ export class CryptoService {
             break;
           case 'ethereum':
             coin = 'ETH-USD';
-            break;    
+            break;
+          case 'tether':
+            coin = 'USDT-USD';
+            break;
+          case 'usd-coin':
+            coin = 'USDC-USD';
+            break;
+          case 'multi-collateral-dai':
+            coin = 'DAI-USD';
+            break;               
           default:
             coin = 'DGB-USD';
             break;
@@ -108,7 +117,7 @@ export class CryptoService {
     try{
       return this.http.post('https://us-central1-bittrex-auth.cloudfunctions.net/bittrex/trade',data).toPromise();
     }catch(e){
-      console.log(e);
+      alert(e);
     }  
   }
 
@@ -143,7 +152,7 @@ export class CryptoService {
     try{
       return this.http.post('https://us-central1-bittrex-auth.cloudfunctions.net/bittrex/balance',data).toPromise();
     }catch(e){
-      console.log(e);
+      alert(e);
     }  
   }
 
@@ -164,7 +173,7 @@ export class CryptoService {
     try{
       return this.http.post('https://us-central1-bittrex-auth.cloudfunctions.net/bittrex/getaddress',data).toPromise();
     }catch(e){
-      console.log(e);
+      alert(e);
     }  
   }
 
@@ -188,8 +197,18 @@ export class CryptoService {
     try{
       return this.http.post('https://us-central1-bittrex-auth.cloudfunctions.net/bittrex/address',data).toPromise();
     }catch(e){
-      console.log(e);
+      alert(e);
     }  
+  }
+
+  public checkSubscription(subscription: string){
+    try{
+      return this.http.post('https://us-central1-stripe-test-api.cloudfunctions.net/payWithStripe/checksubscription', {
+        subscription: subscription
+      });
+    }catch(e){
+      alert(e)
+    }
   }
   
 

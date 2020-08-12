@@ -78,7 +78,7 @@
         <ion-text *ngIf="!this.ethAddress">{{'settings.tap' | translate}} Ethereum {{'settings.address' | translate}}.</ion-text>
       </ion-label>
     </ion-item>
-    <div *ngIf="this.ethWyreAddress && this.btcWyreAddress && !this.autoSell">
+    <div *ngIf="this.active ==='active' && this.ethWyreAddress && this.btcWyreAddress && !this.autoSell">
       <ion-item *ngIf="this.ethWyreAddress && this.btcWyreAddress" color="light">
         <p>Wyre Settings</p>
       </ion-item>
