@@ -146,9 +146,14 @@ export class TransactPage {
           this.time = environment.key;
           this.code = `${this.time}${this.user}`;
           let decrypt: any = this.userProfile.encoded;
-          if(decrypt){
+          if(decrypt && decrypt.k && decrypt.s){
             this.bittrexKey = aes256.decrypt(this.code, decrypt.k);
             this.bittrexSecret = aes256.decrypt(this.code, decrypt.s);
+          } else {
+            this.bittrexKey = '';
+            this.bittrexSecret = '';
+            this.autoSell = false;
+            this.storage.set('auto-sell', false);
           }
           switch(this.coin){
             case 'digibyte':
@@ -305,15 +310,13 @@ export class TransactPage {
         if((transfer.tokenAddress === environment.tether
           || transfer.tokenAddress === environment.usdc) 
           && transfer.amount / 1000000 === this.amount){
-          this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
-          console.log(this.tx)
+          this.tx = transfer.transactionHash;
           this.presentConfirmSuccess(this.tx);
           this.storeTransactionData();
           this.w3d.disconnect();
         } else if (transfer.tokenAddress === environment.dai && 
           transfer.amount / 1000000000000000000 === this.amount ) {
-          this.tx = `${transfer.amount} transfered at ${transfer.timestamp}`;
-          console.log(this.tx)
+          this.tx = transfer.transactionHash;
           this.presentConfirmSuccess(this.tx);
           this.storeTransactionData();
           this.w3d.disconnect();
@@ -330,8 +333,19 @@ export class TransactPage {
           if(tx){
             this.searching2 = false;
             this.tx = tx.toString();
-            this.presentConfirmSuccess(this.tx);
-            this.storeTransactionData();
+            this.cryptoService.checkTransaction(this.tx).then((res:any) =>{
+              console.log(res);
+              if (res.vout) {
+                res.vout.forEach(element => {
+                  if(parseFloat(element.value) === this.amount){
+                    this.presentConfirmSuccess(this.tx);
+                    this.storeTransactionData();
+                  }
+                });
+              } else{
+                alert(res);
+              }
+            })
             if(this.autoSell){
               let data = {
                 k: this.bittrexKey,

@@ -140,9 +140,14 @@ export class Tab3Page{
           this.time = environment.key;
           this.code = `${this.time}${this.uid}`;
           let decrypt: any = this.userProfile.encoded;
-          if(decrypt){
+          if(decrypt && decrypt.k && decrypt.s){
             this.bittrexKey = aes256.decrypt(this.code, decrypt.k);
             this.bittrexSecret = aes256.decrypt(this.code, decrypt.s);
+          } else {
+            this.bittrexKey = '';
+            this.bittrexSecret = '';
+            this.autoSell = false;
+            this.storage.set('auto-sell', false);
           }
           if(this.subscription){
             this.getSubscriptionStatus(this.subscription);
@@ -157,6 +162,12 @@ export class Tab3Page{
       console.log(res)
       if(res.status){
         this.active = res.status;
+        if(this.active !== 'active'){
+          this.wyreActive = false;
+          this.autoSellWyre = false;
+          this.storage.set('wyre-active', false);
+          this.storage.set('wyre-liquidate', false);
+        }
       }
     });
   }
@@ -191,17 +202,21 @@ export class Tab3Page{
 
   autoSellActive(){
     this.storage.set('auto-sell', this.autoSell);
+    this.wyreActive = false;
+    this.autoSellWyre = false;
     this.storage.set('wyre-active', false);
     this.storage.set('wyre-liquidate', false);
   }
 
   wyreActivate(){
     this.storage.set('wyre-active', this.wyreActive);
+    this.autoSell = false;
     this.storage.set('auto-sell', false);
   }
 
   wyreLiquidate(){
     this.storage.set('wyre-liquidate', this.autoSellWyre);
+    this.autoSell = false;
     this.storage.set('auto-sell', false);
   }
 
@@ -678,9 +693,12 @@ export class Tab3Page{
         }, {
           text: 'Save',
           handler: (data) => {
-            this.bittrexKey = data.bittrexKey.trim();
-            this.bittrexSecret = data.bittrexSecret.trim();
-              if(this.bittrexKey && this.bittrexSecret && (this.bittrexKey.trim() != this.bittrexSecret.trim())) {
+            this.bittrexKey = data.bittrexKey ? data.bittrexKey.trim() : null;
+            this.bittrexSecret = data.bittrexSecret ? data.bittrexSecret.trim() : null;
+            console.log(this.bittrexSecret)
+            console.log(this.bittrexKey)
+            console.log(this.bittrexKey !== null && this.bittrexSecret !== null);
+              if(this.bittrexKey !== null && this.bittrexSecret !== null) {
                 let key = aes256.encrypt(this.code, this.bittrexKey);
                 let secret = aes256.encrypt(this.code, this.bittrexSecret);         
                 if(key && secret) {
@@ -696,14 +714,16 @@ export class Tab3Page{
                   setTimeout(()=>{
                     this.presentToast();
                   },5000);
-              } else if (this.bittrexKey === null || this.bittrexKey === ''){
-                let data = {
-                  key: this.bittrexKey = '',
-                  secret: this.bittrexSecret = ''
-                };
-                this.addressWarning(data);
-              }
-            }  
+              } 
+            }  else {
+              let data = {
+                k: this.bittrexKey,
+                s: this.bittrexSecret
+              };
+              this.autoSell = false;
+              this.storage.set('auto-sell', this.autoSell);
+              this.settingsService.updateBit(data);
+            }
           }
         },
       ]

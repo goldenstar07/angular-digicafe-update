@@ -23,8 +23,7 @@
             <p *ngIf="tx.txId.length>0 && tx.coin === 'digibyte'" class="item-desc"><a href="https://digiexplorer.info/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <p *ngIf="tx.txId.length>0 && tx.coin === 'bitcoin'" class="item-desc"><a href="https://insight.bitpay.com/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <p *ngIf="tx.txId.length>0 && tx.coin === 'litecoin'" class="item-desc"><a href="https://insight.litecore.io/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
-            <p *ngIf="tx.txId.length>0 && tx.coin === 'ethereum'" class="item-desc"><a href="https://etherscan.io/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
-            <p *ngIf="tx.txId.length>0 && tx.coin === 'card'" class="item-desc">{{tx.txId}}</p>
+            <p *ngIf="tx.txId.length>0 && tx.coin === 'ethereum' || tx.coin === 'tether' || tx.coin === 'multi-collateral-dai' || tx.coin === 'usd-coin'" class="item-desc"><a href="https://etherscan.io/tx/{{tx.txId}}">{{tx.txId | slice: 0:10}}</a></p>
             <!-- <p class="txid">{{ tx.txId }}</p> -->
           </ion-col>
           <ion-col size="2" size-xs>

@@ -17,7 +17,7 @@ export class AddItemsComponent implements OnInit {
   searchTerm: string = '';
   searching: any = false;
   ios: boolean;
-  public language: string = null;
+  public language: string = 'en';
 
   constructor(private itemsService: ItemsService, 
     public navCtrl: NavController, 
@@ -40,13 +40,13 @@ export class AddItemsComponent implements OnInit {
       }
 
       this.storage.get('language').then((data) => {
-        this.language = !data ? null : data;
+        this.language = !data ? 'en' : data;
         this.translate.use(this.language);
       });
-      if(!this.language){
-        this.translate.setDefaultLang('en');
-        this.translate.use('en');
-      }
+      // if(!this.language){
+      //   this.translate.setDefaultLang('en');
+      //   this.translate.use('en');
+      // }
   }
 
   ngOnInit() {

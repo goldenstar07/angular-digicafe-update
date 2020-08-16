@@ -210,6 +210,14 @@ export class CryptoService {
       alert(e)
     }
   }
+
+  public checkTransaction(txid: string){
+    try{
+      return this.http.get(`https://explorer.digibyteapi.com/api/tx/${txid}`).toPromise();
+    } catch(e){
+      alert(e)
+    }
+  }
   
 
   // async createTransaction(endAddress: string, txWallet: string, referral: string, privateKey: any, amount: number, autoSell: boolean, coin: string) {
