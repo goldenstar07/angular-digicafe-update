@@ -29,7 +29,7 @@ export class AppComponent {
   initializeApp(){
     this.platform.ready().then(() => {
       this.listenDisconnect();
-      this.listenConnect();
+      //this.listenConnect();
       App.addListener('appUrlOpen', (data: any) => {
         this.zone.run(() => {
             const slug = data.url.split(".us").pop();
@@ -48,12 +48,12 @@ export class AppComponent {
       });
   }
 
-  private listenConnect(){
-    this.network.onConnect()
-      .subscribe(async () => {
-        await this.showAlert2();
-      });
-  }
+  // private listenConnect(){
+  //   this.network.onConnect()
+  //     .subscribe(async () => {
+  //       await this.showAlert2();
+  //     });
+  // }
 
   async showAlert1() {
     const alert1 = await this.alertCtrl.create({
@@ -64,14 +64,14 @@ export class AppComponent {
     return await alert1.present();
   }
 
-  async showAlert2() {
-    const alert2 = await this.alertCtrl.create({
-      header: 'Network Connected',
-      subHeader: 'Successfully connected to the internet!',
-      buttons: ['OK']
-    });
-    return await alert2.present();
-  }
+  // async showAlert2() {
+  //   const alert2 = await this.alertCtrl.create({
+  //     header: 'Network Connected',
+  //     subHeader: 'Successfully connected to the internet!',
+  //     buttons: ['OK']
+  //   });
+  //   return await alert2.present();
+  // }
 
   logOut(){
     this.authService.logoutUser();
